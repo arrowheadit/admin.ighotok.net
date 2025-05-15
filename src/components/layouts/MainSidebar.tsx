@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2 } from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText } from "lucide-react";
 
 import {
   Sidebar,
@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import { useAuth } from "@/context/hooks";
+
 
 export function MainSidebar() {
   const { logout, isLoading } = useAuth()
@@ -85,6 +86,29 @@ export function MainSidebar() {
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
+                  </SidebarMenu>
+                </CollapsibleContent>
+              </Collapsible>
+              <Collapsible className="px-4" defaultOpen>
+                <CollapsibleTrigger asChild>
+                  <Button variant={"ghost"} className="flex items-center justify-between w-full text-sm font-medium text-left py-2">
+                    <div className="flex items-center gap-2">
+                      <BookOpenText />
+                      <span className="font-medium">Religion</span>
+                    </div>
+                    <ChevronDown className="h-4 w-4 transition-transform" />
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenu className="ml-6 space-y-1">
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link to="religion/religions" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("religion/religions") ? "bg-gray-100 " : ""} !w-[85%]`}>
+                          Religion
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    
                   </SidebarMenu>
                 </CollapsibleContent>
               </Collapsible>
