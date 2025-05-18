@@ -17,7 +17,7 @@ export function Header() {
   const { logout } = useAuth()
 
   return (
-    <header className="flex h-16 items-center justify-between border-b px-6">
+    <header className="flex h-16 items-center justify-between border-b px-6 bg-white">
       <div className="flex items-center gap-2 lg:hidden">{/* Mobile menu button would go here */}</div>
       <div className="hidden flex-1 lg:flex">
         <form className="w-full max-w-sm">
@@ -60,7 +60,7 @@ export function Header() {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => logout()} className="cursor-pointer text-destructive">Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
