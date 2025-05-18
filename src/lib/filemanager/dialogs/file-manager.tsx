@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { DialogOverlay, DialogTitle } from "@radix-ui/react-dialog";
@@ -6,44 +6,14 @@ import {
   Folder, File, FileText, FileImage, FileArchive,
   Upload, Plus, Trash2, Grid, List, Check, ChevronRight, ChevronDown
 } from "lucide-react";
-
-// TypeScript definitions
-interface FileManagerProps {
-  dialogController?: [boolean, (open: boolean) => void];
-  onFileSelect?: (files: FileItem[]) => void;
-  multiple?: boolean;
-  defaultView?: "grid" | "list";
-}
-
-interface FolderItem {
-  id: number;
-  name: string;
-  parentId: number | null;
-  children?: number[];
-}
-
-interface FileItem {
-  id: number;
-  name: string;
-  type: string;
-  size: string;
-  modified: string;
-  folderId: number;
-  selected?: boolean;
-}
-
-type FolderContents = {
-  [key: number]: FileItem[];
-}
-
-type ViewMode = "grid" | "list";
+import type { FileItem, FileManagerProps, FolderContents, FolderItem, ViewMode } from "@/types/file-manager";
 
 export default function FileManager({ 
   dialogController, 
   onFileSelect,
   multiple = false,
   defaultView = "grid"
-}: FileManagerProps = {}) {
+}: FileManagerProps) {
   // State to control dialog visibility (using provided controller or internal state)
   const [internalOpen, setInternalOpen] = useState(true);
   const [open, setOpen] = dialogController || [internalOpen, setInternalOpen];
@@ -290,8 +260,9 @@ export default function FileManager({
             </div>
             
             <div className="flex items-center">
-              <button 
-                className="cursor-pointer p-1 hover:bg-gray-100 rounded opacity-0 hover:opacity-100"
+              <button
+                type="button"
+                className="cursor-pointer p-1 hover:bg-gray-100 rounded"
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowNewFolderInput(folder.id);
@@ -300,8 +271,9 @@ export default function FileManager({
               >
                 <Plus className="h-3 w-3 text-gray-500" />
               </button>
-              <button 
-                className="cursor-pointer p-1 hover:bg-gray-100 rounded opacity-0 hover:opacity-100"
+              <button
+                type="button"
+                className="cursor-pointer p-1 hover:bg-gray-100 rounded"
                 onClick={(e) => {
                   e.stopPropagation();
                   removeFolder(folder.id);
@@ -314,7 +286,10 @@ export default function FileManager({
           </div>
           
           {showNewFolderInput === folder.id && (
-            <div className="flex items-center ml-6 mt-1 mb-1">
+            <div 
+              ref={newFolderInputRef}
+              className="flex items-center ml-6 mt-1 mb-1"
+            >
               <input
                 type="text"
                 className="text-sm border rounded px-2 py-1 w-full"
@@ -342,7 +317,7 @@ export default function FileManager({
           )}
           
           {isExpanded && (
-            <div className="ml-2">
+            <div className="ml-2 min-w-fit">
               {renderFolderTree(folder.id, depth + 1)}
             </div>
           )}
@@ -351,12 +326,35 @@ export default function FileManager({
     });
   };
 
+  // Add ref for the new folder input container
+  const newFolderInputRef = useRef<HTMLDivElement>(null);
+  
+  // Effect to handle clicks outside the new folder input
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        showNewFolderInput !== null && 
+        newFolderInputRef.current && 
+        !newFolderInputRef.current.contains(event.target as Node)
+      ) {
+        setShowNewFolderInput(null);
+        setNewFolderName("");
+      }
+    };
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showNewFolderInput]);
+  
   return (
     <Dialog open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
       <DialogOverlay className="fixed inset-0 bg-black/50 z-50" onClick={() => setOpen(false)} />
       <div className="fixed top-1/2 left-1/2 z-50 w-full max-w-5xl translate-x-[-50%] translate-y-[-50%] rounded-lg bg-white p-6 shadow-lg">
         <div className="flex items-center justify-between mb-4">
           <DialogTitle className="text-xl font-semibold">File Manager</DialogTitle>
+          {/*  */}
           <div className="flex gap-2">
             {/* View toggle buttons */}
             <div className="flex border rounded-md overflow-hidden">
@@ -384,55 +382,65 @@ export default function FileManager({
         
         <div className="grid grid-cols-12 gap-4 border rounded-md">
           {/* Folder sidebar */}
-          <div className="col-span-3 h-[450px] overflow-y-auto border-r p-2">
-            
-            {/* Root level new folder input or button */}
-            {showNewFolderInput === null ? (
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="flex items-center gap-1 w-full mb-2" 
-                onClick={() => setShowNewFolderInput(-1)}
-              > 
-                <Plus className="h-4 w-4" /> 
-                <span>New Folder</span> 
-              </Button>
-            ) : (
-              showNewFolderInput === -1 && (
-                <div className="flex items-center mb-2">
-                  <input
-                    type="text"
-                    className="text-sm border rounded px-2 py-1 w-full"
-                    placeholder="New folder name"
-                    value={newFolderName}
-                    onChange={(e) => setNewFolderName(e.target.value)}
-                    autoFocus
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') addNewFolder(null);
-                      if (e.key === 'Escape') {
-                        setShowNewFolderInput(null);
-                        setNewFolderName("");
-                      }
-                    }}
-                  />
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
-                    className="ml-1 p-1"
-                    onClick={() => addNewFolder(null)}
+          <div 
+            className="col-span-4 h-[450px] overflow-y-auto border-r p-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+            tabIndex={0}
+            onWheel={(e) => {
+              e.currentTarget.scrollTop += e.deltaY;
+            }}
+          >
+            <div className="min-w-[200px]">
+              {/* Root level new folder input or button */}
+              {showNewFolderInput === null ? (
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="flex items-center gap-1 w-full mb-2" 
+                  onClick={() => setShowNewFolderInput(-1)}
+                > 
+                  <Plus className="h-4 w-4" /> 
+                  <span>New Folder</span> 
+                </Button>
+              ) : (
+                showNewFolderInput === -1 && (
+                  <div 
+                    ref={newFolderInputRef}
+                    className="flex items-center mb-2"
                   >
-                    <Check className="h-4 w-4" />
-                  </Button>
-                </div>
-              )
-            )}
-            
-            {/* Folder tree */}
-            {renderFolderTree(null)}
+                    <input
+                      type="text"
+                      className="text-sm border rounded px-2 py-1 w-full"
+                      placeholder="New folder name"
+                      value={newFolderName}
+                      onChange={(e) => setNewFolderName(e.target.value)}
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') addNewFolder(null);
+                        if (e.key === 'Escape') {
+                          setShowNewFolderInput(null);
+                          setNewFolderName("");
+                        }
+                      }}
+                    />
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="ml-1 p-1"
+                      onClick={() => addNewFolder(null)}
+                    >
+                      <Check className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )
+              )}
+              
+              {/* Folder tree */}
+              {renderFolderTree(null)}
+            </div>
           </div>
           
           {/* File content area */}
-          <div className="col-span-9 h-[450px] overflow-y-auto p-3 relative">
+          <div className="col-span-8 h-[450px] overflow-y-auto p-3 relative">
             {/* Floating Upload Button */}
             <Button 
               size="sm" 
@@ -529,4 +537,5 @@ export default function FileManager({
         </div>
       </div>
     </Dialog>
-  );}
+  );
+}
