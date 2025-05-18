@@ -124,7 +124,7 @@ export function MainSidebar() {
 
         <div className="mt-auto p-4">
           <Separator className="my-4" />
-          <Button disabled={isLoading} variant="destructive" className="w-full justify-center gap-2" onClick={() => logout()}>
+          <Button disabled={isLoading} variant="outline" className="w-full justify-center gap-2 border border-destructive text-destructive" onClick={() => logout()}>
             {isLoading? "Logging out..." : "Logout"}
             {isLoading ? <Loader2 className="animate-spin" />  : <LogOut className="h-4 w-4" />}
           </Button>
