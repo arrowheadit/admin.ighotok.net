@@ -7,3 +7,4 @@ export * from "./blog/tags";
 export * from "./blog/create-post";
 export * from "./religion/religions";
 export * from "./religion/castes";
+export * from "./education/educations";
