@@ -19,15 +19,17 @@ export default function AddCasteDialog({
   editAbleCaste
 }: {
   dialogController: [boolean, (open: boolean) => void]
-  religionOptions: { id: number; name: string }[]
+  religionOptions: { value: number; label: string }[]
   editAbleCaste?: {
     id: number;
     name: string; 
+    religion_id: number;
   }
 }) {
   const [open, setOpen] = dialogController;
   const [ formState, setFormState ] = useState({ 
     name: editAbleCaste?.name || "",
+    religion_id: editAbleCaste?.religion_id || ""
   });
 
   const { mutateAsync: createCaste, isPending: isCreating } = useCreateCasteMutation()
@@ -38,7 +40,7 @@ export default function AddCasteDialog({
 
     toast.promise(
       editAbleCaste
-        ? updateCaste({ id: editAbleCaste.id, name: formState.name }, {
+        ? updateCaste({ id: editAbleCaste.id, name: formState.name , religion_id: Number(formState.religion_id) }, {
             onSuccess: () => {
               setOpen(false);
             },
@@ -47,7 +49,7 @@ export default function AddCasteDialog({
             },
           })
         :
-      createCaste({ casteName: formState.name } , {
+      createCaste({ casteName: formState.name , religion_id: Number(formState.religion_id) }, {
         onSuccess: () => {
           setOpen(false);
         },
@@ -79,15 +81,16 @@ export default function AddCasteDialog({
             </div>
             <Select
               disabled={isCreating || isUpdating}
-              onValueChange={(value) => setFormState({ ...formState, name: value })}
+              defaultValue={editAbleCaste?.religion_id.toString()}
+              onValueChange={(value) => setFormState({ ...formState, religion_id: value })}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select Religion" />
               </SelectTrigger>
             <SelectContent>
               {religionOptions.map((option) => (
-                <SelectItem key={option.id} value={option.name}>
-                  {option.name}
+                <SelectItem key={option.value} value={option.value.toString()}>
+                  {option.label}
                 </SelectItem>
               ))}
             </SelectContent>

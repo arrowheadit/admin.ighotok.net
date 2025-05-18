@@ -4,9 +4,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 export const useCreateCasteMutation = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async ({ casteName }:{casteName: string}) => {
+        mutationFn: async ({ casteName,religion_id}:{casteName: string,religion_id: number}) => {
             return await authAxios.post('/religion-castes', {
                 name: casteName,
+                religion_id
             })
         },
         onSuccess: () => {
@@ -19,9 +20,10 @@ export const useCreateCasteMutation = () => {
 export const useUpdateCasteMutation = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async (caste: { id: number; name: string }) => {
+        mutationFn: async (caste: { id: number; name: string; religion_id: number }) => {
             return await authAxios.put(`/religion-castes/${caste.id}`, {
                 name: caste.name,
+                religion_id: caste.religion_id
             })
         },
         onSuccess: () => {
