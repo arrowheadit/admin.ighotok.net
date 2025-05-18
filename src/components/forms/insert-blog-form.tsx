@@ -6,6 +6,7 @@ import { Textarea } from "../ui/textarea";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import FileManager from "@/lib/filemanager/dialogs/file-manager";
 
 export interface CreatePostFormValues {
   title: string;
@@ -143,6 +144,8 @@ export function InsertBlogForm() {
     }
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+  
   return (
     <Card className="p-6">
       <form onSubmit={handleFormSubmit} className="space-y-6">
@@ -174,6 +177,16 @@ export function InsertBlogForm() {
               />
               {errors.description && <p className="text-sm text-red-500">{errors.description}</p>}
             </div>
+
+            <Button variant={"outline"} type="button" onClick={() => setIsOpen(true)}>
+              Upload Images
+            </Button>
+
+            {isOpen && (
+              <FileManager
+                dialogController={[isOpen, setIsOpen]}
+              />
+            )}
 
             {/* Banner Image */}
             <div className="space-y-2">
@@ -228,13 +241,13 @@ export function InsertBlogForm() {
 
           <div className="col-span-12 md:col-span-4 space-y-6">
             {/* Category Selection */}
-            <div className="space-y-2">
+            <div className="space-y-2 ">
               <Label htmlFor="category_id">Category</Label>
               <Select
                 value={formData.category_id ? formData.category_id.toString() : ""}
                 onValueChange={(value) => handleSelectChange("category_id", value)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>

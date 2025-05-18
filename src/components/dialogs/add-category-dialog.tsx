@@ -116,3 +116,8 @@ export default function AddCategoryDialog({
     </Dialog>
   );
 }
+// {
+//     dialogController,
+// }:{
+//     dialogController: [boolean, (open: boolean) => void]
+// }
