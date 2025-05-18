@@ -1,32 +1,30 @@
 
-import { useReligionQuery } from "@/queris";
+import { useEducationQuery } from "@/queris";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Pagination from "./pagination";
 import { Button } from "../ui/button";
 import { Archive, Loader, Loader2, PencilLine, Trash2 } from "lucide-react";
 import { Fragment, useState } from "react";
-import AddReligionDialog from "../dialogs/add-religion-dialog";
+import AddEducationDialog from "../dialogs/add-education-dialog";
 import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
-import { useDeleteReligionMutation } from "@/mutations";
+import { useDeleteEducationMutation } from "@/mutations";
 import { toast } from "sonner";
 
-export default function ReligionsTable() {
+export default function EducationTable() {
     const [page, setPage] = useState(1);
-    const page_size = 3; 
+    const page_size = 10; 
     const sort_by = "id";
     const sort_type = "desc";
      // This should be replaced with the actual total pages from your API response
-    const { data: religions } = useReligionQuery({ page,page_size, sort_by, sort_type }); 
-    const totalPages = religions?.data?.last_page ?? 1;
-    console.log('Total Pages:', totalPages, 'Page Size:', page,[...Array(totalPages)]);
-    const { mutateAsync: deleteReligion, isPending } = useDeleteReligionMutation(); 
+    const { data: educations } = useEducationQuery({ page,page_size, sort_by, sort_type }); 
+    const totalPages = educations?.data?.data?.last_page ?? 1;    
+    const { mutateAsync: deleteEducation, isPending } = useDeleteEducationMutation(); 
     const [dialogState, setDialogState] = useState<{
         open: boolean;
-        religion?: { id: number; name: string;};
+        education?: { id: number; degree: string;};
     }>({ open: false });
 
-    const religionList = religions?.data?.data ?? [];
-    console.log('religious table');
+    const educationList = educations?.data?.data?.data ?? [];
     return (
             <Fragment>
                 <Table>
@@ -37,7 +35,7 @@ export default function ReligionsTable() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {religionList.length === 0 ? (
+                        {educationList.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={3} className="text-center border-r">
                                     {isPending ? (
@@ -45,28 +43,28 @@ export default function ReligionsTable() {
                                     ) : (
                                         <div className="flex flex-col items-center min-h-[200px] justify-center space-y-1">
                                             <Archive className="text-blue-400" size={72}/>
-                                            <p className="text-gray-500 text-lg">No Religions Found</p>
+                                            <p className="text-gray-500 text-lg">No Education Found</p>
                                         </div>
                                     )}
                                 </TableCell>
                             </TableRow>
                         ): 
-                            religionList.map((religion: { id: number, name: string }) => (
-                                <TableRow key={religion.id}>
-                                    <TableCell colSpan={2} className="border-r border-b">{religion.name}</TableCell>
+                            educationList.map((education: { id: number, name: string }) => (
+                                <TableRow key={education.id}>
+                                    <TableCell colSpan={2} className="border-r border-b">{education.degree}</TableCell>
                                     
                                     <TableCell className="border-b">
                                         <div className="flex items-center ">
                                             <Button 
                                                 variant="default" 
                                                 size="sm" 
-                                                onClick={() => setDialogState({ open: true, religion })}
+                                                onClick={() => setDialogState({ open: true, education })}
                                             >
                                                 <PencilLine />
                                             </Button>
                                             <ConfirmDeleteDialog
                                                 title="Are you sure?"
-                                                description="You want to delete this Religion?"
+                                                description="You want to delete this Education?"
                                                 triggerButton={
                                                     <Button variant="destructive" size="sm" className="ml-2">
                                                         <Trash2 />
@@ -77,11 +75,11 @@ export default function ReligionsTable() {
                                                         variant="destructive"
                                                         onClick={() => {
                                                             toast.promise(
-                                                                deleteReligion(religion.id),
+                                                                deleteEducation(education.id),
                                                                 {
-                                                                    loading: "Deleting Religion...",
-                                                                    success: "Religion deleted successfully!",
-                                                                    error: "Error deleting Religion.",
+                                                                    loading: "Deleting Education...",
+                                                                    success: "Education deleted successfully!",
+                                                                    error: "Error deleting Education.",
                                                                 }
                                                             )
                                                         }}
@@ -98,9 +96,9 @@ export default function ReligionsTable() {
                             ))
                         }
                         {dialogState.open && (
-                            <AddReligionDialog
-                                dialogController={[dialogState.open, (open) => setDialogState({ open, religion: undefined })]}
-                                editAbleReligion={dialogState.religion}
+                            <AddEducationDialog
+                                dialogController={[dialogState.open, (open) => setDialogState({ open, education: undefined })]}
+                                editAbleEducation={dialogState.education}
                             />
                         )}
                     </TableBody>
@@ -108,8 +106,8 @@ export default function ReligionsTable() {
                 <Pagination
                     currentPage={page}
                     totalPages={totalPages}
-                onPageChange={(newPage) => { setPage(newPage) }}
-                    maxButtons={3}
+                    onPageChange={(newPage) => { setPage(newPage) }}
+                    maxButtons={5}
                 />                
             </Fragment>
     );

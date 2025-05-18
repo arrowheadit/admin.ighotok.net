@@ -118,6 +118,28 @@ export function MainSidebar() {
                   </SidebarMenu>
                 </CollapsibleContent>
               </Collapsible>
+              <Collapsible className="px-4" defaultOpen>
+                <CollapsibleTrigger asChild>
+                  <Button variant={"ghost"} className="flex items-center justify-between w-full text-sm font-medium text-left py-2">
+                    <div className="flex items-center gap-2">
+                      <BookOpenText />
+                      <span className="font-medium">Education</span>
+                    </div>
+                    <ChevronDown className="h-4 w-4 transition-transform" />
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenu className="ml-6 space-y-1">
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link to="education/educations" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("education/educations") ? "bg-gray-100 " : ""} !w-[85%]`}>
+                          Education
+                        </Link>                        
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>                   
+                  </SidebarMenu>
+                </CollapsibleContent>
+              </Collapsible>
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
