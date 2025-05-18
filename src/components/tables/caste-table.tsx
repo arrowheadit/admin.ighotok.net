@@ -10,7 +10,11 @@ import ConfirmDeleteDialog from "@/components/dialogs/pop-confirm-dialog";
 import { useDeleteCasteMutation } from "@/mutations";
 import { toast } from "sonner";
 
-export default function CasteTable(populateCasteReligionOptionList: (religionList: { id: number; name: string }[]) => void) {
+export default function CasteTable({
+  populateCasteReligionOptionList,
+}: {
+  populateCasteReligionOptionList: (religionList: { value: number; label: string }[]) => void;
+}) {
     const [page, setPage] = useState(1);
     const page_size = 10; 
     const sort_by = "id";
@@ -29,11 +33,11 @@ export default function CasteTable(populateCasteReligionOptionList: (religionLis
     const casteReligionOptionList = castes?.data?.religions ?? [];
     
     console.log('Castes table');
-    // useEffect(() => {
-    //     if (casteReligionOptionList.length > 0) {
-    //         populateCasteReligionOptionList(casteReligionOptionList);
-    //     }
-    // }, [casteReligionOptionList]);
+    useEffect(() => {
+        if (casteReligionOptionList.length > 0) {
+            populateCasteReligionOptionList(casteReligionOptionList);
+        }
+    }, [casteReligionOptionList]);
     return (
             <Fragment>
                 <Table>

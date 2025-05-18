@@ -3,20 +3,13 @@ import CasteTable from "@/components/tables/caste-table";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-
+type religionOption = {
+  value: number;
+  label: string;
+};
 export function Castes() {
   const [open, setOpen] = useState(false);
-  const [casteReligionOptionList, setCasteReligionOptionList] = useState([]);
-  const [religionOptions, setReligionOptions] = useState([
-    { id: 1, name: "Hindu" },
-    { id: 2, name: "Muslim" },
-    { id: 3, name: "Christian" },
-    { id: 4, name: "Sikh" },
-    { id: 5, name: "Buddhist" },
-    { id: 6, name: "Jain" },
-    { id: 7, name: "Zoroastrian" },
-  ]);
-
+  const [casteReligionOptionList, setCasteReligionOptionList] = useState<religionOption[]>([]);  
   return (
     <section className="space-y-4">
       <div className="flex justify-between items-center">
@@ -29,8 +22,8 @@ export function Castes() {
           <AddCasteDialog dialogController={[open, setOpen]} religionOptions={casteReligionOptionList} />
         )}
       </div>
-      {/* <CasteTable populateCasteReligionOptionList={(religionOps)=>setCasteReligionOptionList(religionOps)} /> */}
-      <CasteTable/>
+      <CasteTable populateCasteReligionOptionList={setCasteReligionOptionList} />
+      {/* <CasteTable/> */}
     </section>
   )
 }
