@@ -105,10 +105,16 @@ export function MainSidebar() {
                       <SidebarMenuButton asChild>
                         <Link to="religion/religions" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("religion/religions") ? "bg-gray-100 " : ""} !w-[85%]`}>
                           Religion
+                        </Link>                        
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>                       
+                         <Link to="religion/castes" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("religion/castes") ? "bg-gray-100 " : ""} !w-[85%]`}>
+                          Caste
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
-                    
                   </SidebarMenu>
                 </CollapsibleContent>
               </Collapsible>

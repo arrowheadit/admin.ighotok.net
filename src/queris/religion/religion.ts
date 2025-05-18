@@ -6,7 +6,6 @@ type UseReligionQueryParams = {
     page_size?: number;
     sort_by?: string;
     sort_type?: string;
-    limit?: number;
     search?: string;
 }
 export const useReligionQuery = (params: UseReligionQueryParams) => {

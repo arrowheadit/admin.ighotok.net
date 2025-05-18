@@ -1,43 +1,51 @@
 
-import { useReligionQuery } from "@/queris";
+import { useCasteQuery } from "@/queris";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Pagination from "./pagination";
 import { Button } from "../ui/button";
 import { Archive, Loader, Loader2, PencilLine, Trash2 } from "lucide-react";
-import { Fragment, useState } from "react";
-import AddReligionDialog from "../dialogs/add-religion-dialog";
-import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
-import { useDeleteReligionMutation } from "@/mutations";
+import { Fragment, useEffect, useState } from "react";
+import AddCasteDialog from "@/components/dialogs/add-caste-dialog";
+import ConfirmDeleteDialog from "@/components/dialogs/pop-confirm-dialog";
+import { useDeleteCasteMutation } from "@/mutations";
 import { toast } from "sonner";
 
-export default function ReligionsTable() {
+export default function CasteTable(populateCasteReligionOptionList: (religionList: { id: number; name: string }[]) => void) {
     const [page, setPage] = useState(1);
-    const page_size = 3; 
+    const page_size = 10; 
     const sort_by = "id";
     const sort_type = "desc";
      // This should be replaced with the actual total pages from your API response
-    const { data: religions } = useReligionQuery({ page,page_size, sort_by, sort_type }); 
-    const totalPages = religions?.data?.last_page ?? 1;
+    const { data: castes } = useCasteQuery({ page,page_size, sort_by, sort_type }); 
+    const totalPages = castes?.data?.data?.last_page ?? 1;
     console.log('Total Pages:', totalPages, 'Page Size:', page,[...Array(totalPages)]);
-    const { mutateAsync: deleteReligion, isPending } = useDeleteReligionMutation(); 
+    const { mutateAsync: deleteCaste, isPending } = useDeleteCasteMutation(); 
     const [dialogState, setDialogState] = useState<{
         open: boolean;
-        religion?: { id: number; name: string;};
+        caste?: { id: number; name: string };
     }>({ open: false });
 
-    const religionList = religions?.data?.data ?? [];
-    console.log('religious table');
+    const casteList = castes?.data?.data?.data ?? [];
+    const casteReligionOptionList = castes?.data?.religions ?? [];
+    
+    console.log('Castes table');
+    // useEffect(() => {
+    //     if (casteReligionOptionList.length > 0) {
+    //         populateCasteReligionOptionList(casteReligionOptionList);
+    //     }
+    // }, [casteReligionOptionList]);
     return (
             <Fragment>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="border-r">Name</TableHead>
+                        <TableHead className="border-r">Religion</TableHead>
+                        <TableHead className="border-r">Caste</TableHead>
                             <TableHead className="border-r">Action</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {religionList.length === 0 ? (
+                        {casteList.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={3} className="text-center border-r">
                                     {isPending ? (
@@ -45,28 +53,29 @@ export default function ReligionsTable() {
                                     ) : (
                                         <div className="flex flex-col items-center min-h-[200px] justify-center space-y-1">
                                             <Archive className="text-blue-400" size={72}/>
-                                            <p className="text-gray-500 text-lg">No Religions Found</p>
+                                            <p className="text-gray-500 text-lg">No castes Found</p>
                                         </div>
                                     )}
                                 </TableCell>
                             </TableRow>
                         ): 
-                            religionList.map((religion: { id: number, name: string }) => (
-                                <TableRow key={religion.id}>
-                                    <TableCell colSpan={2} className="border-r border-b">{religion.name}</TableCell>
+                            casteList.map((caste: { id: number, religion: { name: string }, name: string }) => (
+                                <TableRow key={caste.id}>
+                                    <TableCell className="border-r border-b">{caste.religion?.name}</TableCell>
+                                    <TableCell className="border-r border-b">{caste.name}</TableCell>
                                     
                                     <TableCell className="border-b">
                                         <div className="flex items-center ">
                                             <Button 
                                                 variant="default" 
                                                 size="sm" 
-                                                onClick={() => setDialogState({ open: true, religion })}
+                                                onClick={() => setDialogState({ open: true, caste })}
                                             >
                                                 <PencilLine />
                                             </Button>
                                             <ConfirmDeleteDialog
                                                 title="Are you sure?"
-                                                description="You want to delete this Religion?"
+                                                description="You want to delete this Caste?"
                                                 triggerButton={
                                                     <Button variant="destructive" size="sm" className="ml-2">
                                                         <Trash2 />
@@ -77,11 +86,11 @@ export default function ReligionsTable() {
                                                         variant="destructive"
                                                         onClick={() => {
                                                             toast.promise(
-                                                                deleteReligion(religion.id),
+                                                                deleteCaste(caste.id),
                                                                 {
-                                                                    loading: "Deleting Religion...",
-                                                                    success: "Religion deleted successfully!",
-                                                                    error: "Error deleting Religion.",
+                                                                    loading: "Deleting Caste...",
+                                                                    success: "Caste deleted successfully!",
+                                                                    error: "Error deleting Caste.",
                                                                 }
                                                             )
                                                         }}
@@ -98,9 +107,10 @@ export default function ReligionsTable() {
                             ))
                         }
                         {dialogState.open && (
-                            <AddReligionDialog
-                                dialogController={[dialogState.open, (open) => setDialogState({ open, religion: undefined })]}
-                                editAbleReligion={dialogState.religion}
+                            <AddCasteDialog
+                                dialogController={[dialogState.open, (open) => setDialogState({ open, caste: undefined })]}
+                                editAbleCaste={dialogState.caste}
+                                religionOptions={casteReligionOptionList}
                             />
                         )}
                     </TableBody>
@@ -108,8 +118,8 @@ export default function ReligionsTable() {
                 <Pagination
                     currentPage={page}
                     totalPages={totalPages}
-                onPageChange={(newPage) => { setPage(newPage) }}
-                    maxButtons={3}
+                    onPageChange={(newPage) => { setPage(newPage) }}
+                    maxButtons={5}
                 />                
             </Fragment>
     );
