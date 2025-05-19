@@ -136,7 +136,14 @@ export function MainSidebar() {
                           Education
                         </Link>                        
                       </SidebarMenuButton>
-                    </SidebarMenuItem>                   
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link to="education/education-subjects" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("education/education-subjects") ? "bg-gray-100 " : ""} !w-[85%]`}>
+                          Education Subject
+                        </Link>                        
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>  
                   </SidebarMenu>
                 </CollapsibleContent>
               </Collapsible>

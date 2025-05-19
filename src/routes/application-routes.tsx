@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthenticatedOnly, GuestsOnly } from "./middleware";
 import { DashboardLayout } from "@/components/layouts/dashboard-layout";
-import { Categories, CreatePost, Home, Login, Post, Tags, Religions,Castes,Educations } from "@/pages";
+import { Categories, CreatePost, Home, Login, Post, Tags, Religions,Castes,Educations,EducationSubjects } from "@/pages";
 import { useAuth } from "@/context/hooks";
 import { useEffect, useState } from "react";
 
@@ -46,6 +46,7 @@ export default function ApplicationRoutes() {
                             {/* Education Routes Group */}
                             <Route path="/education">
                                 <Route path="educations" element={<Educations />} /> 
+                                <Route path="education-subjects" element={<EducationSubjects />} />
                             </Route>
 
                         </Route>
