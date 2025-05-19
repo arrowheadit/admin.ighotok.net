@@ -10,10 +10,10 @@ export function Educations() {
   return (
     <section className="space-y-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Education Subject/Major</h1>
+        <h1 className="text-2xl font-bold">Education</h1>
         <Button variant="default" onClick={() => setOpen(true)}>
           <PlusIcon />
-          Add New Major
+          Add New Degree
         </Button> 
          {open && ( 
           <AddEducationDialog dialogController={[open, setOpen]}/>
