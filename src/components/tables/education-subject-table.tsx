@@ -4,22 +4,28 @@ import { useEducationSubjectQuery } from "@/queris";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Pagination from "./pagination";
 import { Button } from "../ui/button";
-import { Archive, Loader, Loader2, PencilLine, Trash2 } from "lucide-react";
+import { Archive, Loader, Loader2, PencilLine, Trash2 ,Search} from "lucide-react";
 import { Fragment, useState } from "react";
 import AddEducationSubjectDialog from "../dialogs/add-education-subject-dialog";
 import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
 import { useDeleteEducationSubjectMutation } from "@/mutations";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { Input } from "@/components/ui/input"
 
 export default function EducationSubjectTable({ populateEducationOptions }: { populateEducationOptions: (educationList: { value: number; label: string }[]) => void }) {
     // Removed duplicate declaration of educationOptionList
+    const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const page_size = 10; 
     const sort_by = "id";
     const sort_type = "desc";
+    // useEffect(() => { 
+
+    // }, []);
      // This should be replaced with the actual total pages from your API response
-    const { data: educationSubjects } = useEducationSubjectQuery({ page,page_size, sort_by, sort_type }); 
+    const { data: educationSubjects } = useEducationSubjectQuery({ page, page_size, sort_by, sort_type ,search});
+    console.log('educationSubjects..', educationSubjects);
     const totalPages = educationSubjects?.data?.data?.last_page ?? 1;    
     const { mutateAsync: deleteEducationSubject, isPending } = useDeleteEducationSubjectMutation(); 
     const [dialogState, setDialogState] = useState<{
@@ -35,9 +41,24 @@ export default function EducationSubjectTable({ populateEducationOptions }: { po
         if (educationOptionList.length > 0) {
             populateEducationOptions(educationOptionList);
         }
-    }, [educationOptionList,populateEducationOptions]);  
+    }, [educationOptionList, populateEducationOptions]);  
+    
     return (
-            <Fragment>
+        <Fragment>
+                <div className="hidden flex-1 lg:flex ms-2">
+                    <form className="w-full max-w-sm">
+                    <div className="relative">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            type="search"
+                            value={search}
+                            placeholder="Search..."
+                            className="w-full bg-background pl-8 md:w-[300px] lg:w-[400px]"
+                            onChange={(e)=>{setSearch(e.target.value)}}
+                        />
+                    </div>
+                    </form>
+                </div>
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -108,13 +129,7 @@ export default function EducationSubjectTable({ populateEducationOptions }: { po
                                 </TableRow>
                             ))
                         }
-                        {dialogState.open && (
-                            <AddEducationSubjectDialog
-                                dialogController={[dialogState.open, (open) => setDialogState({ open, eduSub: undefined })]}
-                            editAbleEducationSubject={dialogState.eduSub}
-                            educationOptions={educationOptionList}
-                            />
-                        )}
+                       
                     </TableBody>
                 </Table>
                 <Pagination
@@ -122,7 +137,14 @@ export default function EducationSubjectTable({ populateEducationOptions }: { po
                     totalPages={totalPages}
                     onPageChange={(newPage) => { setPage(newPage) }}
                     maxButtons={5}
-                />                
-            </Fragment>
+            /> 
+                {dialogState.open && (
+                    <AddEducationSubjectDialog
+                        dialogController={[dialogState.open, (open) => setDialogState({ open, eduSub: undefined })]}
+                    editAbleEducationSubject={dialogState.eduSub}
+                    educationOptions={educationOptionList}
+                    />
+                )}
+        </Fragment>
     );
 }

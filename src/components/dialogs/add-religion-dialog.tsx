@@ -6,8 +6,6 @@ import { useCreateReligionMutation, useUpdateReligionMutation } from "@/mutation
 import { toast } from "sonner";
 import { useState } from "react";
 import { Dialog, DialogClose, DialogOverlay, DialogTitle } from "@/components/ui/dialog";
-import { Switch } from "@/components/ui/switch";
-
 export default function AddReligionDialog({
   dialogController,
   editAbleReligion

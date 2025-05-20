@@ -38,7 +38,7 @@ export default function PopConfirmDialog({
         <AlertDialog onOpenChange={() => {
             if (isLoading) return
         }}>
-            <AlertDialogTrigger>
+            <AlertDialogTrigger asChild>
                 {triggerButton ?? (
                     <Button variant="default" size="sm">
                         Open
@@ -54,11 +54,11 @@ export default function PopConfirmDialog({
                         </AlertDialogDescription>
                     )}
                 </AlertDialogHeader>
-                <AlertDialogFooter>
+                <AlertDialogFooter >
                     {cancelButton ? ( cancelButton ) : (
                         <AlertDialogCancel 
                             onClick={() => cancelAction ? cancelAction() : null}
-                            disabled={isLoading}
+                            disabled={isLoading} 
                         >
                             {isLoading && <Loader2 className="animate-spin"/>}
                             {isLoading ? "Loading..." : "Cancel"}
@@ -67,7 +67,7 @@ export default function PopConfirmDialog({
                     {confirmButton ? ( confirmButton ) : (
                         <AlertDialogAction 
                             onClick={() => confirmAction ? confirmAction() : null}
-                            disabled={isLoading}
+                            disabled={isLoading} 
                         >
                             {isLoading && <Loader2 className="animate-spin"/>}
                             {isLoading ? "Loading..." : "Confirm"}

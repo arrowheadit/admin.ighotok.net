@@ -3,20 +3,22 @@ import { useEducationQuery } from "@/queris";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Pagination from "./pagination";
 import { Button } from "../ui/button";
-import { Archive, Loader, Loader2, PencilLine, Trash2 } from "lucide-react";
+import { Archive, Loader, Loader2, PencilLine, Trash2,Search } from "lucide-react";
 import { Fragment, useState } from "react";
 import AddEducationDialog from "../dialogs/add-education-dialog";
 import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
 import { useDeleteEducationMutation } from "@/mutations";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input"
 
 export default function EducationTable() {
+    const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const page_size = 10; 
     const sort_by = "id";
     const sort_type = "desc";
      // This should be replaced with the actual total pages from your API response
-    const { data: educations } = useEducationQuery({ page,page_size, sort_by, sort_type }); 
+    const { data: educations } = useEducationQuery({ page,page_size, sort_by, sort_type,search }); 
     const totalPages = educations?.data?.data?.last_page ?? 1;    
     const { mutateAsync: deleteEducation, isPending } = useDeleteEducationMutation(); 
     const [dialogState, setDialogState] = useState<{
@@ -26,7 +28,21 @@ export default function EducationTable() {
 
     const educationList = educations?.data?.data?.data ?? [];
     return (
-            <Fragment>
+        <Fragment>
+            <div className="hidden flex-1 lg:flex ms-2">
+                <form className="w-full max-w-sm">
+                <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        type="search"
+                        value={search}
+                        placeholder="Search..."
+                        className="w-full bg-background pl-8 md:w-[300px] lg:w-[400px]"
+                        onChange={(e)=>{setSearch(e.target.value)}}
+                    />
+                </div>
+                </form>
+            </div>
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -49,7 +65,7 @@ export default function EducationTable() {
                                 </TableCell>
                             </TableRow>
                         ): 
-                            educationList.map((education: { id: number, name: string }) => (
+                            educationList.map((education: { id: number, degree: string }) => (
                                 <TableRow key={education.id}>
                                     <TableCell colSpan={2} className="border-r border-b">{education.degree}</TableCell>
                                     
@@ -94,13 +110,7 @@ export default function EducationTable() {
                                     </TableCell>
                                 </TableRow>
                             ))
-                        }
-                        {dialogState.open && (
-                            <AddEducationDialog
-                                dialogController={[dialogState.open, (open) => setDialogState({ open, education: undefined })]}
-                                editAbleEducation={dialogState.education}
-                            />
-                        )}
+                        }                        
                     </TableBody>
                 </Table>
                 <Pagination
@@ -108,7 +118,13 @@ export default function EducationTable() {
                     totalPages={totalPages}
                     onPageChange={(newPage) => { setPage(newPage) }}
                     maxButtons={5}
-                />                
+            /> 
+            {dialogState.open && (
+                <AddEducationDialog
+                    dialogController={[dialogState.open, (open) => setDialogState({ open, education: undefined })]}
+                    editAbleEducation={dialogState.education}
+                />
+            )}
             </Fragment>
     );
 }
