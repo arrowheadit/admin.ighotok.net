@@ -1,11 +1,19 @@
 import { authAxios } from "@/lib/axios"
 import { useQuery } from "@tanstack/react-query"
-
-export const useTagListQuery = () => {
+type UseQueryParams = {
+    page?: number,
+    page_size?: number;
+    sort_by?: string;
+    sort_type?: string;
+    search?: string;
+}
+export const useTagListQuery = (params:UseQueryParams) => {
     return useQuery({
-        queryKey: ["tags"],
+        queryKey: ["tags",params],
         queryFn: async () => {
-            const res = await authAxios.get("/tags")
+            const res = await authAxios.get("/tags", {
+                params
+            })
             return res.data
         },
     })

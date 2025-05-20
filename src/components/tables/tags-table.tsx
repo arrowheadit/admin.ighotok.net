@@ -1,16 +1,26 @@
+
+import { Archive, Loader, Loader2, PencilLine, Trash2,Search } from "lucide-react";
+import { useState, Fragment } from "react";
+import Pagination from "./pagination";
 import { Button } from "../ui/button";
-import { Archive, Loader, Loader2, PencilLine, Trash2 } from "lucide-react";
-import { useState } from "react";
 import AddTagDialog from "../dialogs/add-tag-dialog"; // Replace AddCategoryDialog with AddTagDialog
 import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
 import { toast } from "sonner";
 import { useDeleteBlogTagMutation } from "@/mutations";
 import { useTagListQuery } from "@/queris";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+
 
 
 export default function TagsTable() {
-    const { data: tags } = useTagListQuery(); // Fetch tags instead of categories
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
+    const page_size = 10; 
+    const sort_by = "id";
+    const sort_type = "desc";
+    const { data: tags } = useTagListQuery({ page, page_size, sort_by, sort_type, search });
+    const totalPages = tags?.data?.data?.last_page ?? 1;
     const { mutateAsync: deleteTag, isPending } = useDeleteBlogTagMutation(); // Replace deleteCategory with deleteTag
     const [dialogState, setDialogState] = useState<{
         open: boolean;
@@ -20,7 +30,22 @@ export default function TagsTable() {
     const tagList = tags?.data?.data?.data ?? []; // Use tagList instead of categoryList
     
     return (
-        <Table>
+        <Fragment>            
+            <div className="hidden flex-1 lg:flex ms-2">
+                <form className="w-full max-w-sm">
+                <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        type="search"
+                        value={search}
+                        placeholder="Search..."
+                        className="w-full bg-background pl-8 md:w-[300px] lg:w-[400px]"
+                        onChange={(e)=>{setSearch(e.target.value)}}
+                    />
+                </div>
+                </form>
+            </div>
+             <Table>
             <TableHeader>
                 <TableRow>
                     <TableHead className="border-r">Name</TableHead>
@@ -90,13 +115,21 @@ export default function TagsTable() {
                         </TableRow>
                     ))
                 )}
-                {dialogState.open && (
+            </TableBody>
+            </Table>
+            <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={(newPage) => { setPage(newPage) }}
+                maxButtons={2}
+            /> 
+            {dialogState.open && (
                     <AddTagDialog
                         dialogController={[dialogState.open, (open) => setDialogState({ open, tag: undefined })]}
                         editAbleTag={dialogState.tag} // Replace editAbleCategory with editAbleTag
                     />
                 )}
-            </TableBody>
-        </Table>
+        </Fragment>
+       
     );
 }
