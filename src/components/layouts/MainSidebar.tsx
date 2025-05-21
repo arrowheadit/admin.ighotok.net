@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText } from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness } from "lucide-react";
 
 import {
   Sidebar,
@@ -146,7 +146,17 @@ export function MainSidebar() {
                     </SidebarMenuItem>  
                   </SidebarMenu>
                 </CollapsibleContent>
-              </Collapsible>
+              </Collapsible> 
+               <SidebarMenu className="">
+                <SidebarMenuItem>
+                  <SidebarMenuButton >
+                <Link to="profession" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("profession") ? "bg-gray-100 " : ""} `}>
+                    <BriefcaseBusiness />
+                    Profession
+                  </Link>                        
+                  </SidebarMenuButton>
+                </SidebarMenuItem>                    
+                </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>

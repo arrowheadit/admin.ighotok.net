@@ -2,54 +2,56 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle, X } from "lucide-react";
-import { useCreateEducationMutation, useUpdateEducationMutation } from "@/mutations";
+import { useCreateProfessionMutation, useUpdateProfessionMutation } from "@/mutations";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Dialog, DialogClose, DialogOverlay, DialogTitle } from "@/components/ui/dialog";
-export default function AddEducationDialog({
+
+
+export default function AddProfessionDialog({
   dialogController,
-  editAbleEducation
+  editAbleProfession
 }: {
   dialogController: [boolean, (open: boolean) => void]
-  editAbleEducation?: {
+  editAbleProfession?: {
     id: number;
-    degree: string; 
+    name: string; 
   }
 }) {
   const [open, setOpen] = dialogController;
   const [ formState, setFormState ] = useState({ 
-    degree: editAbleEducation?.degree || "",
+    name: editAbleProfession?.name || "",
   });
 
-  const { mutateAsync: createEducation, isPending: isCreating } = useCreateEducationMutation()
-  const { mutateAsync: updateEducation, isPending: isUpdating } = useUpdateEducationMutation()
+  const { mutateAsync: createProfession, isPending: isCreating } = useCreateProfessionMutation()
+  const { mutateAsync: updateProfession, isPending: isUpdating } = useUpdateProfessionMutation()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     toast.promise(
-      editAbleEducation
-        ? updateEducation({ id: editAbleEducation.id, degree: formState.degree }, {
+      editAbleProfession
+        ? updateProfession({ id: editAbleProfession.id, name: formState.name }, {
             onSuccess: () => {
               setOpen(false);
             },
             onError: (error) => {
-              console.error("Error updating education:", error);
+              console.error("Error updating Profession:", error);
             },
           })
         :
-      createEducation({ degree: formState.degree } , {
+      createProfession({ name: formState.name } , {
         onSuccess: () => {
           setOpen(false);
         },
         onError: (error) => {
-          console.error("Error creating education:", error);
+          console.error("Error creating Profession:", error);
         },
       }),
       {
-        loading: "Creating Education...",
-        success: "Education created successfully!",
-        error: "Error creating education.",
+        loading: editAbleProfession?"Updating Profession...":"Creating Profession...",
+        success: editAbleProfession?"Profession updated successfully!":"Profession created successfully!",
+        error: editAbleProfession?"Error updating Profession.":"Error creating Profession.",
       }
     );
   };
@@ -61,22 +63,22 @@ export default function AddEducationDialog({
         className="fixed bg-white rounded-xl p-6 max-w-md w-full mx-auto top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
         onClick={(e) => e.stopPropagation()}
       >
-        <DialogTitle className="text-xl font-semibold">Add Education</DialogTitle>
+        <DialogTitle className="text-xl font-semibold">Add Profession</DialogTitle>
 
         <form onSubmit={handleSubmit} className="mt-4">
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="name" className="block mb-2 font-medium">Education Name</Label>              
+              <Label htmlFor="name" className="block mb-2 font-medium">Profession Name</Label>              
             </div>
             <Input
               disabled={isCreating || isUpdating}
-              id="degree"
-              name="degree"
+              id="name"
+              name="name"
               type="text"
               className="w-full"
               required
-              value={formState.degree}
-              onChange={(e) => setFormState({ ...formState, degree: e.target.value })}
+              value={formState.name}
+              onChange={(e) => setFormState({ ...formState, name: e.target.value })}
             />
           </div>
 
@@ -87,7 +89,7 @@ export default function AddEducationDialog({
             </Button>
             <Button type="submit" disabled={isCreating || isUpdating}>
               {isCreating || isUpdating && <LoaderCircle className="animate-spin"/>}
-              {editAbleEducation ? "Update" : "Create"}
+              {editAbleProfession ? "Update" : "Create"}
             </Button>
           </div>
         </form>
