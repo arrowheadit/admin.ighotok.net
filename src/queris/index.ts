@@ -6,3 +6,4 @@ export * from './religion/religion';
 export * from './education/education';
 export * from './education/educationSubjects';
 export * from './profession';
+export * from './faqs';

@@ -10,3 +10,4 @@ export * from "./religion/castes";
 export * from "./education/educations";
 export * from "./education/EducationSubjects";
 export * from "./profession";
+export * from "./faqs";

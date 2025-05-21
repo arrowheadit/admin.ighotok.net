@@ -156,6 +156,16 @@ export function MainSidebar() {
                   </Link>                        
                   </SidebarMenuButton>
                 </SidebarMenuItem>                    
+              </SidebarMenu>
+              <SidebarMenu className="">
+                <SidebarMenuItem>
+                  <SidebarMenuButton >
+                <Link to="faqs" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("faqs") ? "bg-gray-100 " : ""} `}>
+                    <BriefcaseBusiness />
+                    Faqs
+                  </Link>                        
+                  </SidebarMenuButton>
+                </SidebarMenuItem>                    
                 </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
