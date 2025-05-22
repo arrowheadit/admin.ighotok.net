@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness } from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap } from "lucide-react";
 
 import {
   Sidebar,
@@ -93,6 +93,28 @@ export function MainSidebar() {
                 <CollapsibleTrigger asChild>
                   <Button variant={"ghost"} className="flex items-center justify-between w-full text-sm font-medium text-left py-2">
                     <div className="flex items-center gap-2">
+                       <MapPinned />
+                      <span className="font-medium">Geo Location</span>
+                    </div>
+                    <ChevronDown className="h-4 w-4 transition-transform" />
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenu className="ml-6 space-y-1">
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link to="geo-locations/area" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("geo-locations/area") ? "bg-gray-100 " : ""} !w-[85%]`}>
+                          Area
+                        </Link>                        
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>                    
+                  </SidebarMenu>
+                </CollapsibleContent>
+              </Collapsible>
+              <Collapsible className="px-4" defaultOpen>
+                <CollapsibleTrigger asChild>
+                  <Button variant={"ghost"} className="flex items-center justify-between w-full text-sm font-medium text-left py-2">
+                    <div className="flex items-center gap-2">
                       <BookOpenText />
                       <span className="font-medium">Religion</span>
                     </div>
@@ -122,7 +144,7 @@ export function MainSidebar() {
                 <CollapsibleTrigger asChild>
                   <Button variant={"ghost"} className="flex items-center justify-between w-full text-sm font-medium text-left py-2">
                     <div className="flex items-center gap-2">
-                      <BookOpenText />
+                      <GraduationCap size={32} absoluteStrokeWidth />
                       <span className="font-medium">Education</span>
                     </div>
                     <ChevronDown className="h-4 w-4 transition-transform" />
@@ -151,7 +173,7 @@ export function MainSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton >
                 <Link to="profession" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("profession") ? "bg-gray-100 " : ""} `}>
-                    <BriefcaseBusiness />
+                    <BriefcaseBusiness size={16}  />
                     Profession
                   </Link>                        
                   </SidebarMenuButton>
@@ -161,7 +183,7 @@ export function MainSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton >
                 <Link to="faqs" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("faqs") ? "bg-gray-100 " : ""} `}>
-                    <BriefcaseBusiness />
+                    <ShieldQuestion size={16} />
                     Faqs
                   </Link>                        
                   </SidebarMenuButton>

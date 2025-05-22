@@ -11,3 +11,4 @@ export * from "./education/educations";
 export * from "./education/EducationSubjects";
 export * from "./profession";
 export * from "./faqs";
+export * from "./GeoLocations/area";

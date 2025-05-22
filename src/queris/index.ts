@@ -7,3 +7,4 @@ export * from './education/education';
 export * from './education/educationSubjects';
 export * from './profession';
 export * from './faqs';
+export * from './GeoLocations/areas';
