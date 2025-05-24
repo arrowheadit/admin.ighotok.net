@@ -28,3 +28,34 @@ export type UpazilaOptions = {
     value: number,
     label:string,
 }
+
+export type UpazilaItem = {
+    id: number,
+    name: string,
+    bn_name: string,
+    district_id:number,
+    url: string,
+    is_active: boolean,
+    district: {
+        name: string,
+    }
+};
+export type UpdateUpazilaItem = {
+    id: number,
+    name: string,
+    bn_name: string,
+    district_id:number,
+    url: string,
+    is_active: boolean,
+};
+export type CreateUpazilaItem = {
+    name: string,
+    bn_name: string,
+    district_id:number,
+    url: string,
+    is_active: boolean,
+};
+export type DistrictOptions = {
+    value: number,
+    label:string,
+}

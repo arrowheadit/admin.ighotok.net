@@ -8,3 +8,4 @@ export * from './education/educationSubjects';
 export * from './profession';
 export * from './faqs';
 export * from './GeoLocations/areas';
+export * from './GeoLocations/upazilas';

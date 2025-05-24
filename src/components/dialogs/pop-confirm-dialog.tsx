@@ -22,6 +22,8 @@ type PopConfirmDialogProps = {
     title?: string
     description?: string
     isLoading?: boolean
+    open?: boolean
+    onOpenChange?: (open: boolean) => void
 }
 
 export default function PopConfirmDialog({
@@ -32,13 +34,13 @@ export default function PopConfirmDialog({
     cancelAction,
     title,
     description,
-    isLoading
+    isLoading,
+     open,
+    onOpenChange
 }:Readonly<PopConfirmDialogProps>) {
     return (
-        <AlertDialog onOpenChange={() => {
-            if (isLoading) return
-        }}>
-            <AlertDialogTrigger asChild>
+        <AlertDialog open={open} onOpenChange={onOpenChange}>
+            <AlertDialogTrigger  asChild>
                 {triggerButton ?? (
                     <Button variant="default" size="sm">
                         Open

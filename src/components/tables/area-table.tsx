@@ -106,7 +106,7 @@ export default function AreaTable({ populateUpazilaOptions }: { populateUpazilaO
                                             </Button>
                                             <ConfirmDeleteDialog
                                                 title="Are you sure?"
-                                                description="Do you want to delete this Education Subject?"
+                                                description="You want to De-Activate this Area"
                                                 triggerButton={
                                                     <Button variant="destructive" size="sm" className="ml-2">
                                                         <Trash2 />
@@ -119,16 +119,16 @@ export default function AreaTable({ populateUpazilaOptions }: { populateUpazilaO
                                                             toast.promise(
                                                                 deleteArea(area.id),
                                                                 {
-                                                                    loading: "Deleting Area...",
-                                                                    success: "Area deleted successfully!",
-                                                                    error: "Error deleting Area.",
+                                                                    loading: "DeActivating Area...",
+                                                                    success: "Area DeActivated successfully!",
+                                                                    error: "Error DeActivating Area.",
                                                                 }
                                                             )
                                                         }}
                                                         disabled={isPending}
                                                     >
                                                         {isPending && <Loader2 className="animate-spin"/>}
-                                                        {isPending ? "Loading..." : "Delete"}
+                                                        {isPending ? "Loading..." : "DeActivate"}
                                                     </Button>
                                                 }
                                             />
