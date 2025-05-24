@@ -1,5 +1,5 @@
 
-import { useMemo } from "react";
+import { useMemo, useCallback ,useEffect} from "react";
 import { useAreaQuery } from "@/queris";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Pagination from "./pagination";
@@ -10,7 +10,6 @@ import AddAreaDialog from "../dialogs/add-area-dialog";
 import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
 import { useDeleteAreaMutation } from "@/mutations";
 import { toast } from "sonner";
-import { useEffect } from "react";
 import { Input } from "@/components/ui/input"
 import type { AreaItem } from "@/types/geo-location";
 import type { UpazilaOptions } from "@/types/geo-location";
@@ -19,7 +18,7 @@ export default function AreaTable({ populateUpazilaOptions }: { populateUpazilaO
     // Removed duplicate declaration of upazilaOptionList
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
-    const page_size = 10; 
+    const page_size = 5; 
     const sort_by = "id";
     const sort_type = "desc";
     // useEffect(() => { 
@@ -30,6 +29,8 @@ export default function AreaTable({ populateUpazilaOptions }: { populateUpazilaO
     console.log('Areas..', areas);
     const totalPages = areas?.data?.data?.last_page ?? 1;    
     const { mutateAsync: deleteArea, isPending } = useDeleteAreaMutation(); 
+    const [deleteTarget, setDeleteTarget] = useState<AreaItem | null>(null);  
+        const [loadingId,setLoadingId] = useState<number | null>(null);
     const [dialogState, setDialogState] = useState<{
         open: boolean;
         areaData?: AreaItem;
@@ -44,7 +45,22 @@ export default function AreaTable({ populateUpazilaOptions }: { populateUpazilaO
             populateUpazilaOptions(upazilaOptionList);
         }
     }, [upazilaOptionList, populateUpazilaOptions]);  
-    
+     const handleDelete = useCallback(async () => {
+        if (!deleteTarget) return;
+        setLoadingId(deleteTarget.id);
+        try {
+            await toast.promise(deleteArea(deleteTarget.id), {
+                loading: "DeActivating Upazila...",
+                success: "Upazila DeActivated successfully!",
+                error: "Error DeActivating Upazila.",
+            });
+            setDeleteTarget(null);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoadingId(null);
+        }
+    }, [deleteTarget, deleteArea]);
     return (
         <Fragment>
                 <div className="hidden flex-1 lg:flex ms-2">
@@ -87,13 +103,18 @@ export default function AreaTable({ populateUpazilaOptions }: { populateUpazilaO
                                 </TableCell>
                             </TableRow>
                         ): 
-                            areaList.map((area: AreaItem) => (
+                            areaList.slice().sort((a:AreaItem,b:AreaItem)=>Number(b.is_active)-Number(a.is_active)).map((area: AreaItem) => (
                                 <TableRow key={area.id}>
                                     <TableCell  className="border-r border-b">{area.upazila.name}</TableCell>
                                     <TableCell  className="border-r border-b">{area.name}</TableCell>
                                     <TableCell  className="border-r border-b">{area.bn_name}</TableCell>
                                     <TableCell className="border-r border-b">{area.url}</TableCell>
-                                    <TableCell  className="border-r border-b">{area.is_active?"Active":"InActive"}</TableCell>
+                                    <TableCell className="border-r border-b">
+                                    <span
+                                        className={`px-2 py-1 rounded-md text-xs font-medium ${!area.is_active ? "bg-red-100 text-red-800 font-bold" : "bg-green-100 text-green-800 font-bold"}`}>
+                                        {area.is_active ? "ACTIVE" : "INACTIVE"}
+                                    </span>
+                                    </TableCell>
 
                                     <TableCell className="border-b">
                                         <div className="flex items-center ">
@@ -104,34 +125,14 @@ export default function AreaTable({ populateUpazilaOptions }: { populateUpazilaO
                                             >
                                                 <PencilLine />
                                             </Button>
-                                            <ConfirmDeleteDialog
-                                                title="Are you sure?"
-                                                description="You want to De-Activate this Area"
-                                                triggerButton={
-                                                    <Button variant="destructive" size="sm" className="ml-2">
-                                                        <Trash2 />
-                                                    </Button>
-                                                }
-                                                confirmButton={
-                                                    <Button 
-                                                        variant="destructive"
-                                                        onClick={() => {
-                                                            toast.promise(
-                                                                deleteArea(area.id),
-                                                                {
-                                                                    loading: "DeActivating Area...",
-                                                                    success: "Area DeActivated successfully!",
-                                                                    error: "Error DeActivating Area.",
-                                                                }
-                                                            )
-                                                        }}
-                                                        disabled={isPending}
-                                                    >
-                                                        {isPending && <Loader2 className="animate-spin"/>}
-                                                        {isPending ? "Loading..." : "DeActivate"}
-                                                    </Button>
-                                                }
-                                            />
+                                            <Button
+                                                variant="destructive"
+                                                size="sm"
+                                                className="ml-2"
+                                                onClick={()=>setDeleteTarget(area)}
+                                            >    
+                                                <Trash2 />
+                                            </Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -152,7 +153,27 @@ export default function AreaTable({ populateUpazilaOptions }: { populateUpazilaO
                     editAbleArea={dialogState.areaData}
                     upazilaOptions={upazilaOptionList}
                     />
-                )}
+            )}
+            {deleteTarget && (
+                <ConfirmDeleteDialog
+                    open={!!deleteTarget}
+                    onOpenChange={(isOpen) => {
+                    if (!isOpen) setDeleteTarget(null);
+                    }}
+                    title="Are you sure?"
+                    description={`You want to De-Activate "${deleteTarget.name}"`}
+                    confirmButton={
+                    <Button
+                        variant="destructive"
+                        onClick={() => handleDelete()}
+                        disabled={loadingId === deleteTarget.id}
+                    >
+                        {loadingId === deleteTarget.id && <Loader2 className="animate-spin mr-2" />}
+                        {loadingId === deleteTarget.id ? "DeActivating..." : "DeActivate"}
+                    </Button>
+                    }
+                />
+            )}
         </Fragment>
     );
 }

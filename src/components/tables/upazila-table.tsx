@@ -1,5 +1,5 @@
 
-import { useMemo,useCallback } from "react";
+import { useMemo,useCallback,useEffect } from "react";
 import { useUpazilaQuery } from "@/queris";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Pagination from "./pagination";
@@ -10,7 +10,6 @@ import AddUpazilaDialog from "../dialogs/add-upazila-dialog";
 import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
 import { useDeleteUpazilaMutation } from "@/mutations";
 import { toast } from "sonner";
-import { useEffect } from "react";
 import { Input } from "@/components/ui/input"
 import type { DistrictOptions,UpazilaItem } from "@/types/geo-location";
 
@@ -26,8 +25,7 @@ export default function UpazilaTable({ populateDistrictOptions }: { populateDist
     console.log('Upazilas..', upazilas);
     const totalPages = upazilas?.data?.last_page ?? 1;    
     const { mutateAsync: deleteUpazila, isPending } = useDeleteUpazilaMutation(); 
-    const [deleteTarget, setDeleteTarget] = useState<UpazilaItem | null>(null);
-  
+    const [deleteTarget, setDeleteTarget] = useState<UpazilaItem | null>(null);  
     const [loadingId,setLoadingId] = useState<number | null>(null);
     const [dialogState, setDialogState] = useState<{
         open: boolean;
@@ -44,9 +42,7 @@ export default function UpazilaTable({ populateDistrictOptions }: { populateDist
         }
     }, [districtOptionList, populateDistrictOptions]); 
     
-      useEffect(() => { 
-          console.log('delete target has been changed...', deleteTarget);
-    }, [deleteTarget]);
+     
     const handleDelete = useCallback(async () => {
         if (!deleteTarget) return;
         setLoadingId(deleteTarget.id);
@@ -113,9 +109,12 @@ export default function UpazilaTable({ populateDistrictOptions }: { populateDist
                                     <TableCell  className="border-r border-b">{upazila.name}</TableCell>
                                     <TableCell  className="border-r border-b">{upazila.bn_name}</TableCell>
                                     <TableCell className="border-r border-b">{upazila.url}</TableCell>
-                                   <TableCell className={`border-r border-b ${!upazila.is_active ? "text-red-500 font-bold" : "text-green-500 font-bold"}`}>
-                                    {upazila.is_active ? "Active" : "InActive"}
-                                    </TableCell>
+                                <TableCell className="border-r border-b">
+                                    <span
+                                        className={`px-2 py-1 rounded-md text-xs font-medium ${!upazila.is_active ? "bg-red-100 text-red-800 font-bold" : "bg-green-100 text-green-800 font-bold"}`}>
+                                        {upazila.is_active ? "ACTIVE" : "INACTIVE"}
+                                    </span>
+                                </TableCell>
 
                                     <TableCell className="border-b">
                                         <div className="flex items-center ">
