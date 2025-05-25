@@ -96,3 +96,23 @@ export type DivisionOptions = {
     value: number,
     label:string,
 }
+export type DivisionItem = {
+    id: number,
+    name: string,
+    bn_name: string, 
+    url: string,
+    is_active: boolean,
+};
+export type UpdateDivisionItem = {
+    id: number,
+    name: string,
+    bn_name: string,
+    url: string,
+    is_active: boolean,
+};
+export type CreateDivisionItem = {
+    name: string,
+    bn_name: string,
+    url: string,
+    is_active: boolean,
+};
