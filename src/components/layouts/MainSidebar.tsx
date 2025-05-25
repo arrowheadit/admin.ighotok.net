@@ -103,6 +103,15 @@ export function MainSidebar() {
                   <SidebarMenu className="ml-6 space-y-1">
                     <SidebarMenuItem>
                       <SidebarMenuButton asChild>
+                        <Link to="geo-locations/district" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("geo-locations/district") ? "bg-gray-100 " : ""} !w-[85%]`}>
+                          District
+                        </Link>                        
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>                    
+                  </SidebarMenu>
+                  <SidebarMenu className="ml-6 space-y-1">
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
                         <Link to="geo-locations/upazila" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("geo-locations/upazila") ? "bg-gray-100 " : ""} !w-[85%]`}>
                           Upazila
                         </Link>                        

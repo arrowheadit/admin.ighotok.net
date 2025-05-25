@@ -13,3 +13,4 @@ export * from "./profession";
 export * from "./faqs";
 export * from "./GeoLocations/area";
 export * from "./GeoLocations/upazila";
+export * from "./GeoLocations/district";

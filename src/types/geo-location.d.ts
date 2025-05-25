@@ -59,3 +59,40 @@ export type DistrictOptions = {
     value: number,
     label:string,
 }
+
+export type DistrictItem = {
+    id: number,
+    division_id:number,
+    name: string,
+    bn_name: string,    
+    lat: string,    
+    lon: string,    
+    url: string,
+    is_active: boolean,
+    division: {
+        name: string,
+    }
+};
+export type UpdateDistrictItem = {
+    id: number,
+    division_id:number,
+    name: string,
+    bn_name: string,
+    lat: string,
+    lon: string,
+    url: string,
+    is_active: boolean,
+};
+export type CreateDistrictItem = {
+    name: string,
+    division_id:number,
+    bn_name: string,
+    lat: string,
+    lon: string,
+    url: string,
+    is_active: boolean,
+};
+export type DivisionOptions = {
+    value: number,
+    label:string,
+}
