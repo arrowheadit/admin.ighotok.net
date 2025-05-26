@@ -11,3 +11,4 @@ export * from './GeoLocations/areas';
 export * from './GeoLocations/upazilas';
 export * from './GeoLocations/districts';
 export * from './GeoLocations/divisions';
+export * from './Settings/pages';

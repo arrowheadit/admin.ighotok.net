@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap } from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings } from "lucide-react";
 
 import {
   Sidebar,
@@ -215,7 +215,29 @@ export function MainSidebar() {
                   </Link>                        
                   </SidebarMenuButton>
                 </SidebarMenuItem>                    
-                </SidebarMenu>
+              </SidebarMenu>
+              <Collapsible className="px-4" defaultOpen>
+                <CollapsibleTrigger asChild>
+                  <Button variant={"ghost"} className="flex items-center justify-between w-full text-sm font-medium text-left py-2">
+                    <div className="flex items-center gap-2">
+                      <Settings size={32} absoluteStrokeWidth/>
+                      <span className="font-medium">Settings</span>
+                    </div>
+                    <ChevronDown className="h-4 w-4 transition-transform" />
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenu className="ml-6 space-y-1">
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link to="settings/pages" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("settings/Pages") ? "bg-gray-100 " : ""} !w-[85%]`}>
+                          Pages
+                        </Link>                        
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>                    
+                  </SidebarMenu>
+                </CollapsibleContent>
+              </Collapsible> 
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>

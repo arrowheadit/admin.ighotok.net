@@ -6,7 +6,7 @@ export type AreaItem = {
     url: string,
     is_active: boolean,
     upazila: {
-        name: string,
+    name: string,
     }
 };
 export type UpdateAreaItem = {
