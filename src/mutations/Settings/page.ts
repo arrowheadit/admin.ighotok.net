@@ -5,11 +5,10 @@ import type { CreatePageItem,UpdatePageItem } from '@/types/pages'
 export const useCreatePageMutation = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async ({ title,slug,content, status }:CreatePageItem) => {
+        mutationFn: async ({ title,content, status }:CreatePageItem) => {
             return await authAxios.post('/settings/pages', {
-                title: title,                
-                slug: slug,
-                content: content,
+                title: title, 
+                content: Object.entries(content),
                 status: status,
                 
             })
@@ -25,10 +24,10 @@ export const useUpdatePageMutation = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (page: UpdatePageItem) => {
-            return await authAxios.put(`/settings/pages/${page.id}`, {
-                title: page.title,                
-                slug: page.slug,
-                content: page.content,
+            return await authAxios.put(`/settings/pages/${page.slug}`, {
+                id:page.id,
+                title: page.title,
+                content: Object.entries(page.content),
                 status: page.status,
             })
         },
@@ -38,14 +37,23 @@ export const useUpdatePageMutation = () => {
         }
     })
 }
-
+export const useActiveDeActivePageMutation = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (pageId: string) => {
+            return await authAxios.patch(`/settings/pages/${pageId}/status`)
+        },
+        onSuccess: () => {
+            // Invalidate and refetch
+            queryClient.invalidateQueries({ queryKey: ['pages'] })
+        }
+    })
+}
 export const useDeletePageMutation = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async (pageId: number) => {
-            return await authAxios.post(`/page-change-status`, {
-                'page_id':pageId
-            })
+        mutationFn: async (pageId: string) => {
+            return await authAxios.delete(`/settings/pages/${pageId}`)
         },
         onSuccess: () => {
             // Invalidate and refetch

@@ -4,36 +4,47 @@ import { usePageQuery } from "@/queris";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Pagination from "./pagination";
 import { Button } from "../ui/button";
-import { Archive, Loader, Loader2, PencilLine, Trash2 ,Search} from "lucide-react";
+import { Archive, Loader, Loader2, PencilLine, Trash2 ,Search,Component} from "lucide-react";
 import { Fragment, useState } from "react";
  import AddPageDialog from "../dialogs/add-page-dialog";
+ import EditPageSectionDialog from "../dialogs/edit-page-section-dialog";
 import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
-import { useDeletePageMutation } from "@/mutations";
+import { useDeletePageMutation,useActiveDeActivePageMutation } from "@/mutations";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input"
 import type { PageItem } from "@/types/pages";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function PageTable() {
     // Removed duplicate declaration of upazilaOptionList
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
-    const page_size = 5; 
+    const page_size = 10; 
     const sort_by = "id";
     const sort_type = "desc";
     // useEffect(() => { 
 
     // }, []);
      // This should be replaced with the actual total pages from your API response
-    const { data: pages } = usePageQuery({ page, page_size, sort_by, sort_type ,search});
+    const { data: pages,isPending } = usePageQuery({ page, page_size, sort_by, sort_type ,search});
     console.log('Pages..', pages);
     const totalPages = pages?.data?.data?.last_page ?? 1;    
-    const { mutateAsync: deletePage, isPending } = useDeletePageMutation(); 
-    const [deleteTarget, setDeleteTarget] = useState<PageItem | null>(null);  
+    const { mutateAsync: deletePage} = useDeletePageMutation(); 
+    const { mutateAsync: actDeactivatePage } = useActiveDeActivePageMutation(); 
+    const [deleteTarget, setDeleteTarget] = useState<PageItem | null>(null);
+    const [actDeactivateTarget, setActDeactivateTarget] = useState<PageItem | null>(null);
         const [loadingId,setLoadingId] = useState<number | null>(null);
     const [dialogState, setDialogState] = useState<{
         open: boolean;
         pageData?: PageItem;
-    }>({ open: false });
+        isSectionOpen?: boolean;
+    }>({ open: false ,isSectionOpen:false});
 
     const pageList = pages?.data?.data?.data ?? [];
    
@@ -41,10 +52,10 @@ export default function PageTable() {
         if (!deleteTarget) return;
         setLoadingId(deleteTarget.id);
         try {
-            await toast.promise(deletePage(deleteTarget.id), {
-                loading: "DeActivating Upazila...",
-                success: "Upazila DeActivated successfully!",
-                error: "Error DeActivating Upazila.",
+            await toast.promise(deletePage(deleteTarget.slug), {
+                loading: "Deleting Page...",
+                success: "Page Deleted successfully!",
+                error: "Error Deleting Page.",
             });
             setDeleteTarget(null);
         } catch (e) {
@@ -52,7 +63,32 @@ export default function PageTable() {
         } finally {
             setLoadingId(null);
         }
-    }, [deleteTarget, deletePage]);
+     }, [deleteTarget, deletePage]);
+    const handleActDeactivateTarget = useCallback(() => {
+         const run = async () => {
+            if (!actDeactivateTarget) return;
+            setLoadingId(actDeactivateTarget.id);
+            try {
+                await toast.promise(
+                    actDeactivatePage(actDeactivateTarget.slug),
+                    {
+                        loading: `${actDeactivateTarget.status === "active" ? "Deactivating Page..." : "Activating Page..."}`,
+                        success: "Page status updated successfully!",
+                        error: "Error updating page status.",
+                    }
+                );
+                setActDeactivateTarget(null);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                setLoadingId(null);
+            }
+        };
+
+        if (actDeactivateTarget) {
+            run();
+        }
+    },[actDeactivateTarget,actDeactivatePage])
     return (
         <Fragment>
                 <div className="hidden flex-1 lg:flex ms-2">
@@ -97,35 +133,78 @@ export default function PageTable() {
                                     <TableCell  className="border-r border-b">{page.title}</TableCell>
                                    
                                     <TableCell className="border-r border-b">
-                                    <span
+                                        <Switch
+                                            className="cursor-pointer"
+                                            checked={page.status=="active"?true:false} 
+                                            onCheckedChange={(checked: boolean) => setActDeactivateTarget({ ...page, status: checked?"active":"inactive" })} 
+                                            disabled={loadingId === deleteTarget?.id}
+                                        />
+                                    {/* <span
                                         className={`px-2 py-1 rounded-md text-xs font-medium ${page.status==="inactive" ? "bg-red-100 text-red-800 font-bold" : "bg-green-100 text-green-800 font-bold"}`}>
                                         {page.status.toUpperCase()}
-                                    </span>
+                                    </span> */}
                                     </TableCell>
-
                                     <TableCell className="border-b">
                                         <div className="flex items-center ">
-                                            <Button 
+                                             <Button 
                                                 variant="default" 
                                                 size="sm" 
                                                 onClick={() => setDialogState({ open: true, pageData:page })}
                                             >
-                                                <PencilLine />
+                                                <TooltipProvider>
+                                                    <Tooltip>
+                                                        <TooltipTrigger>
+                                                            <PencilLine />
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            Edit Page
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
                                             </Button>
+                                            <Button
+                                            className="ml-2 bg-amber-500"    
+                                               variant="default"
+                                                size="sm" 
+                                                onClick={() => setDialogState({ open: false, pageData:page,isSectionOpen:true })}
+                                            >
+                                               
+                                                <TooltipProvider>
+                                                    <Tooltip>
+                                                        <TooltipTrigger>
+                                                            <Component fill="#FFA500" color="#FFF" />
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            Edit Section
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
+                                                
+                                            </Button>
+                                           
                                             <Button
                                                 variant="destructive"
                                                 size="sm"
                                                 className="ml-2"
                                                 onClick={()=>setDeleteTarget(page)}
                                             >    
-                                                <Trash2 />
+                                                
+                                                <TooltipProvider>
+                                                    <Tooltip>
+                                                        <TooltipTrigger>
+                                                            <Trash2 />
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            Delete Page
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
                                             </Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
                             ))
-                        }
-                        
+                        }                        
                     </TableBody>
                 </Table>
                 <Pagination
@@ -134,11 +213,17 @@ export default function PageTable() {
                     onPageChange={(newPage) => { setPage(newPage) }}
                     maxButtons={5}
             /> 
-                {dialogState.open && (
-                    <AddPageDialog
-                        dialogController={[dialogState.open, (open) => setDialogState({ open, pageData: undefined })]}
-                        editAblePage={dialogState.pageData}
-                    />
+            {dialogState.open && (
+                <AddPageDialog
+                    dialogController={[dialogState.open, (open) => setDialogState({ open, pageData: undefined })]}
+                    editAblePage={dialogState.pageData}
+                />
+            )} 
+            {dialogState.isSectionOpen && (
+                <EditPageSectionDialog
+                    dialogController={[dialogState.isSectionOpen, (isSectionOpen) => setDialogState({ open:false, pageData: undefined,isSectionOpen:isSectionOpen })]}
+                    editAblePage={dialogState.pageData}
+                />
             )} 
              {deleteTarget && (
                 <ConfirmDeleteDialog
@@ -147,7 +232,7 @@ export default function PageTable() {
                     if (!isOpen) setDeleteTarget(null);
                     }}
                     title="Are you sure?"
-                    description={`You want to De-Activate "${deleteTarget.slug}"`}
+                    description={`You want to Delete "${deleteTarget.title}"`}
                     confirmButton={
                     <Button
                         variant="destructive"
@@ -155,11 +240,38 @@ export default function PageTable() {
                         disabled={loadingId === deleteTarget.id}
                     >
                         {loadingId === deleteTarget.id && <Loader2 className="animate-spin mr-2" />}
-                        {loadingId === deleteTarget.id ? "DeActivating..." : "DeActivate"}
+                        {loadingId === deleteTarget.id ? "Deleting..." : "Delete"}
                     </Button>
                     }
                 />
             )}
+             {actDeactivateTarget && (
+                <ConfirmDeleteDialog
+                    open={!!actDeactivateTarget}
+                    onOpenChange={(isOpen) => {
+                        if (!isOpen) setActDeactivateTarget(null);
+                    }}
+                    title="Are you sure?"
+                    description={`You want to ${
+                        actDeactivateTarget.status === "inactive" ? "Deactivate" : "Activate"
+                    } "${actDeactivateTarget.title}"`}
+                    confirmButton={
+                        <Button
+                            variant="destructive"
+                            onClick={() => handleActDeactivateTarget()}
+                            disabled={loadingId === actDeactivateTarget.id}
+                        >
+                            {loadingId === actDeactivateTarget.id && (
+                                <Loader2 className="animate-spin mr-2" />
+                            )}
+                            {loadingId === actDeactivateTarget.id ? "Processing..." : `${
+                        actDeactivateTarget.status == "inactive" ? "Deactivate" : "Activate"
+                    }`}
+                        </Button>
+                    }
+                />
+            )}
+
         </Fragment>
     );
 }

@@ -2,7 +2,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle, X } from "lucide-react";
-import { useCreateDivisionMutation,useUpdateDivisionMutation } from "@/mutations";
+import { useCreatePageMutation,useUpdatePageMutation } from "@/mutations";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Dialog, DialogClose, DialogOverlay, DialogTitle } from "@/components/ui/dialog";
@@ -16,60 +16,61 @@ export default function AddPageDialog({
   editAblePage?: PageItem
 }) {
   const [open, setOpen] = dialogController;
-  const [ formState, setFormState ] = useState({
-    name: editAblePage?.name || "",
-    bn_name: editAblePage?.bn_name || "",
-    url: editAblePage?.url || "",
-    is_active:editAblePage?.is_active || false,
+  const [formState, setFormState] = useState<PageItem>({
+    id: Number(editAblePage?.id) || 0,
+    title: editAblePage?.title || "",
+    slug: editAblePage?.slug || "",
+    content: editAblePage?.content || "",
+    status:editAblePage?.status || "active",
   });
 
-  const { mutateAsync: createDivision, isPending: isCreating } = useCreateDivisionMutation()
-  const { mutateAsync: updateDivision, isPending: isUpdating } = useUpdateDivisionMutation()
+  const { mutateAsync: createPage, isPending: isCreating } = useCreatePageMutation()
+  const { mutateAsync: updatePage, isPending: isUpdating } = useUpdatePageMutation()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     toast.promise(
       editAblePage
-        ? updateDivision(
+        ? updatePage(
           {
             id: editAblePage.id,
-            name: formState.name,
-            bn_name: formState.bn_name,
-            url: formState.url,
-            is_active: Boolean(formState.is_active),            
+            title: formState.title,
+            slug: formState.slug,
+            content: formState.content,
+            status: formState.status,            
           }, {
             onSuccess: () => {
             setOpen(false);
             },
             onError: (error) => {
-              console.error("Error updating Division:", error);
+              console.error("Error updating Page:", error);
             },
           })
         :
-        createDivision({
-            name: formState.name,
-            bn_name: formState.bn_name,
-            url: formState.url,
-            is_active: Boolean(formState.is_active), 
+        createPage({
+            title: formState.title,
+            slug: formState.slug,
+            content: formState.content,
+            status: formState.status,  
         }, {
         onSuccess: () => {
           setOpen(false);
         },
         onError: (error) => {
-          console.error("Error creating area:", error);
+          console.error("Error creating Page:", error);
         },
       }),
       {
         loading: editAblePage
-        ? "Updating Division..."
-        : "Creating Division...",
+        ? "Updating Page..."
+        : "Creating Page...",
         success: editAblePage
-        ? "Division updated successfully!"
-        : "Division created successfully!",
+        ? "Page updated successfully!"
+        : "Page created successfully!",
         error: editAblePage
-        ? "Error updating Division"
-        : "Error creating Division",
+        ? "Error updating Page"
+        : "Error creating Page",
       }
     );
   };
@@ -81,48 +82,43 @@ export default function AddPageDialog({
         className="fixed bg-white rounded-xl p-6 max-w-md w-full mx-auto top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
         onClick={(e) => e.stopPropagation()}
       >
-        <DialogTitle className="text-xl font-semibold">Add Division</DialogTitle>
+        <DialogTitle className="text-xl font-semibold">Add Page</DialogTitle>
 
-        <form onSubmit={handleSubmit} className="mt-4">
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="name" className="block mb-2 font-medium">Name</Label>              
-            </div>           
-          </div>
+        <form onSubmit={handleSubmit} className="mt-4">         
             
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="name" className="block mb-2 font-medium">Division</Label>              
+              <Label htmlFor="name" className="block mb-2 font-medium">Title</Label>              
             </div>
             <Input
               disabled={isCreating || isUpdating}
-              id="name"
-              name="name"
+              id="title"
+              name="title"
               type="text"
               className="w-full"
               required
-              value={formState.name}
-              onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+              value={formState.title}
+              onChange={(e) => setFormState({ ...formState, title: e.target.value })}
             />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="name" className="block mb-2 font-medium">Bn Name</Label>              
+              <Label htmlFor="name" className="block mb-2 font-medium">Slug</Label>              
             </div>
             <Input
               disabled={isCreating || isUpdating}
-              id="bn_name"
-              name="bn_name"
+              id="slug"
+              name="slug"
               type="text"
               className="w-full"
               required
-              value={formState.bn_name}
-              onChange={(e) => setFormState({ ...formState, bn_name: e.target.value })}
+              value={formState.slug}
+              onChange={(e) => setFormState({ ...formState, slug: e.target.value })}
             />
-          </div>
+          </div> */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="name" className="block mb-2 font-medium">URL</Label>              
+              <Label htmlFor="name" className="block mb-2 font-medium">Content</Label>              
             </div>
             <Input
               disabled={isCreating || isUpdating}
@@ -131,18 +127,18 @@ export default function AddPageDialog({
               type="text"
               className="w-full"
               required
-              value={formState.url}
-              onChange={(e) => setFormState({ ...formState, url: e.target.value })}
+              value={formState.content}
+              onChange={(e) => setFormState({ ...formState, content: e.target.value })}
             />
           </div>
            <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="name" className="block mb-2 font-medium">Is Active</Label>              
+              <Label htmlFor="name" className="block mb-2 font-medium">Status</Label>              
             </div>
             <Switch
                   className="cursor-pointer"
-                  checked={formState.is_active} 
-                  onCheckedChange={(checked: boolean) => setFormState({ ...formState, is_active: checked })} 
+                  checked={formState.status=="active"?true:false} 
+                  onCheckedChange={(checked: boolean) => setFormState({ ...formState, status: checked?"active":"inactive" })} 
                   disabled={isCreating || isUpdating} 
                 />
           </div>
