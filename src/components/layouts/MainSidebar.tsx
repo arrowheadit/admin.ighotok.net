@@ -24,6 +24,8 @@ export function MainSidebar() {
   const { logout, isLoading } = useAuth()
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
+  console.log("isMobileOpen", isMobileOpen);
+  
 
   const isActive = (path: string) => location.pathname.startsWith(path);
 
@@ -35,7 +37,10 @@ export function MainSidebar() {
         </Button>
       </div>
 
-      <Sidebar className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <Sidebar 
+        className="w-full h-svh relative" 
+        collapsible="none"
+      >
         <SidebarHeader className="flex items-center justify-between p-4">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
