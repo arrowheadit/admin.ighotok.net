@@ -12,9 +12,6 @@ export * from "./GeoLocations/upazila"
 export * from "./GeoLocations/district"
 export * from "./GeoLocations/division"
 export * from "./Settings/page"
-<<<<<<< HEAD
 export * from "./testimonials"
 export * from "./ourTeams"
-=======
->>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
 

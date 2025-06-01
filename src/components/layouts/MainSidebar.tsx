@@ -1,9 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-<<<<<<< HEAD
 import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings,ShieldCheck,Grip } from "lucide-react";
-=======
-import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings } from "lucide-react";
->>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
 
 import {
   Sidebar,
@@ -225,7 +221,6 @@ export function MainSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>                    
               </SidebarMenu>
-<<<<<<< HEAD
               <SidebarMenu className="">
                 <SidebarMenuItem>
                   <SidebarMenuButton >
@@ -246,8 +241,6 @@ export function MainSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>                    
               </SidebarMenu>
-=======
->>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
               <Collapsible className="px-4" defaultOpen>
                 <CollapsibleTrigger asChild>
                   <Button variant={"ghost"} className="flex items-center justify-between w-full text-sm font-medium text-left py-2">
