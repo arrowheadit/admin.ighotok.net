@@ -28,16 +28,11 @@ export default function AddOurTeamDialog({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    //console.log('handleSubmit clicked'); return false;
     toast.promise(
       editAbleOurTeam
         ? updateOurTeam(
-          {
-            id: editAbleOurTeam.id,
-            name: formState.name,
-            image: formState.image,
-            designation: formState.designation,
-          },
+          {...formState },
           {
             onSuccess: () => {
               setOpen(false);

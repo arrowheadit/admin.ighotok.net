@@ -18,7 +18,7 @@ export const useCreateOurTeamsMutation = () => {
       },
       onSuccess: () => {
         // Invalidate and refetch
-        queryClient.invalidateQueries({ queryKey: ["ourTeams"] });
+        queryClient.invalidateQueries({ queryKey: ["our-teams"] });
       },
     });
 } 
@@ -28,13 +28,14 @@ export const useUpdateOurTeamsMutation = () => {
     return useMutation({
       mutationFn: async (ourTeams: updateOurTeams) => {
         const formData = new FormData();
-        formData.append("name", ourTeams.name) ;
-        formData.append("designation", ourTeams.designation) ;
-        formData.append("image", ourTeams.image) ;
-        return await authAxios.put(`/our-teams/${ourTeams.id}`, {
-          name: ourTeams.name,
-          image: ourTeams.image,
-          designation: ourTeams.designation,
+         formData.append("_method", "PUT");
+        formData.append("name", ourTeams.name);
+        formData.append("designation", ourTeams.designation);
+        formData.append("image", ourTeams.image);
+        return await authAxios.post(`/our-teams/${ourTeams.id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
       },
       onSuccess: () => {

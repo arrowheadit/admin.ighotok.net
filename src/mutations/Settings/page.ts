@@ -1,10 +1,6 @@
 import { authAxios } from '@/lib/axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-<<<<<<< HEAD
 import type { CreatePageItem,UpdatePageItem,PageSectionContent } from '@/types/pages'
-=======
-import type { CreatePageItem,UpdatePageItem } from '@/types/pages'
->>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
 
 export const useCreatePageMutation = () => {
     const queryClient = useQueryClient()
@@ -65,7 +61,6 @@ export const useDeletePageMutation = () => {
         }
     })
 }
-<<<<<<< HEAD
 
 export const useUpdatePageContentMutation = () => {
   const queryClient = useQueryClient();
@@ -87,5 +82,3 @@ export const useUpdatePageContentMutation = () => {
     },
   });
 };
-=======
->>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
