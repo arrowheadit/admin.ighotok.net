@@ -1,14 +1,14 @@
 export type testimonials = {
   id: number;
   name: string;
-  image: string;
+  image: File | string;
   content: string;
   designation: string;
   status: "active" | "inactive";
 };
 export type createTestimonials = {
   name: string;
-  image: string;
+  image: File | string;
   content: string;
   designation: string;
   status: "active" | "inactive";
@@ -17,7 +17,7 @@ export type createTestimonials = {
 export type updateTestimonials = {
   id: number;
   name: string;
-  image: string;
+  image: File | string;
   content: string;
   designation: string;
   status: "active" | "inactive";

@@ -7,7 +7,7 @@ import { Archive, Loader, Loader2, PencilLine, Trash2,Search } from "lucide-reac
 import { Fragment, useState } from "react";
 import AddTestimonialDialog from "../dialogs/add-testimonial-dialog";
 import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
-import { useDeleteFaqsMutation } from "@/mutations";
+import { useDeleteTestimonialsMutation } from "@/mutations";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input"
 import type { testimonials,updateTestimonials } from "@/types/testimonials";
@@ -20,7 +20,7 @@ export default function TestimonialsTable() {
      // This should be replaced with the actual total pages from your API response
     const { data: testimonials } = useTestimonialsQuery({ page,page_size, sort_by, sort_type,search }); 
     const totalPages = testimonials?.data?.data?.last_page ?? 1;    
-    const { mutateAsync: deleteFaqs, isPending } = useDeleteFaqsMutation(); 
+    const { mutateAsync: deleteTestimonials, isPending } = useDeleteTestimonialsMutation(); 
     const [dialogState, setDialogState] = useState<{
         open: boolean;
         testimonials?: updateTestimonials;
@@ -72,10 +72,13 @@ export default function TestimonialsTable() {
                             testimonialsList.map((testimonial: testimonials) => (
                                 <TableRow key={testimonial.id}>
                                     <TableCell className="border-r border-b">{testimonial.name}</TableCell>
-                                    <TableCell className="border-r border-b">{testimonial.image}</TableCell>
-                                    <TableCell className="border-r border-b">{testimonial.content}</TableCell>
+                                    <TableCell className="border-r border-b"><img className="h-12" src={import.meta.env.VITE_API_SERVER_IMAGE_PATH+"testimonials/"+testimonial.image} alt="Testimonial-Image"></img></TableCell>  
+                                    <TableCell className="border-r border-b">{testimonial.content.length>70?`${testimonial.content.slice(0,70)}...`:testimonial.content}</TableCell>
                                     <TableCell className="border-r border-b">{testimonial.designation}</TableCell>
-                                    <TableCell className="border-r border-b">{testimonial.status}</TableCell>
+                                    <TableCell className="border-r border-b"><span
+                                        className={`px-2 py-1 rounded-md text-xs font-medium ${testimonial.status==="inactive" ? "bg-red-100 text-red-800 font-bold" : "bg-green-100 text-green-800 font-bold"}`}>
+                                        {testimonial.status=="active" ? "ACTIVE" : "INACTIVE"}
+                                    </span></TableCell>
                                     
                                     <TableCell className="border-b">
                                         <div className="flex items-center ">
@@ -99,11 +102,11 @@ export default function TestimonialsTable() {
                                                         variant="destructive"
                                                         onClick={() => {
                                                             toast.promise(
-                                                                deleteFaqs(testimonials.id),
+                                                                deleteTestimonials(testimonial.id),
                                                                 {
-                                                                    loading: "Deleting Faqs...",
-                                                                    success: "Faqs deleted successfully!",
-                                                                    error: "Error deleting Faqs.",
+                                                                    loading: "Deleting Testimonial...",
+                                                                    success: "Testimonial deleted successfully!",
+                                                                    error: "Error deleting Testimonial.",
                                                                 }
                                                             )
                                                         }}

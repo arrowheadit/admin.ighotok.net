@@ -83,6 +83,21 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
       });
     }
   };
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    setFormState({
+      ...formState,
+      image: file || "",
+    });
+    console.log('handleImageChange...', formState, file);
+    // Clear error when field is edited
+    if (errors["image" as keyof createTestimonials]) {
+      setErrors({
+        ...errors,
+        ["image" as keyof createTestimonials]: undefined,
+      });
+    }
+  };
   return (
     <Dialog open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
       <DialogOverlay className="fixed inset-0 bg-black/50 z-50" onClick={() => setOpen(false)}/>
@@ -134,6 +149,15 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
               onChange={handleInputChange}
             />
           </div>
+          <div className="mb-4">
+          <Label  htmlFor="image" className="text-sm">Image</Label>
+          <Input 
+              className="w-full"
+              type="file"
+              name="image"
+              onChange={handleImageChange}
+          />          
+      </div>
           <div className="space-y-2 mb-4">
               <Label htmlFor="description">Content</Label>
               <Textarea
