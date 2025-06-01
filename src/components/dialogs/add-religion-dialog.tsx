@@ -58,7 +58,9 @@ export default function AddReligionDialog({
     <Dialog open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
       <DialogOverlay className="fixed inset-0 bg-black/50 z-50" onClick={() => setOpen(false)}/>
       <div
-        className="fixed bg-white rounded-xl p-6 max-w-md w-full mx-auto top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50"
+       className="fixed top-10 left-1/2 transform -translate-x-1/2 
+               bg-white rounded-xl p-6 max-w-md w-full z-50 
+               max-h-[calc(100vh-5rem)] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <DialogTitle className="text-xl font-semibold">Add Religion</DialogTitle>

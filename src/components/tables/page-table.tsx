@@ -6,8 +6,13 @@ import Pagination from "./pagination";
 import { Button } from "../ui/button";
 import { Archive, Loader, Loader2, PencilLine, Trash2 ,Search,Component} from "lucide-react";
 import { Fragment, useState } from "react";
+<<<<<<< HEAD
+import AddPageDialog from "../dialogs/add-page-dialog";
+ import { useNavigate } from "react-router-dom";
+=======
  import AddPageDialog from "../dialogs/add-page-dialog";
  import EditPageSectionDialog from "../dialogs/edit-page-section-dialog";
+>>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
 import ConfirmDeleteDialog from "../dialogs/pop-confirm-dialog";
 import { useDeletePageMutation,useActiveDeActivePageMutation } from "@/mutations";
 import { toast } from "sonner";
@@ -20,18 +25,30 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+<<<<<<< HEAD
+export default function PageTable() {
+=======
 
 export default function PageTable() {
     // Removed duplicate declaration of upazilaOptionList
+>>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const page_size = 10; 
     const sort_by = "id";
     const sort_type = "desc";
+<<<<<<< HEAD
+    const navigate = useNavigate();    
+    const handleEditPageSection = (page: PageItem) => {
+        navigate(`edit-page-section/${page.slug}`, { state:  page });
+    };
+    
+=======
     // useEffect(() => { 
 
     // }, []);
      // This should be replaced with the actual total pages from your API response
+>>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
     const { data: pages,isPending } = usePageQuery({ page, page_size, sort_by, sort_type ,search});
     console.log('Pages..', pages);
     const totalPages = pages?.data?.data?.last_page ?? 1;    
@@ -166,7 +183,11 @@ export default function PageTable() {
                                             className="ml-2 bg-amber-500"    
                                                variant="default"
                                                 size="sm" 
+<<<<<<< HEAD
+                                               onClick={() => handleEditPageSection(page)}
+=======
                                                 onClick={() => setDialogState({ open: false, pageData:page,isSectionOpen:true })}
+>>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
                                             >
                                                
                                                 <TooltipProvider>
@@ -219,12 +240,21 @@ export default function PageTable() {
                     editAblePage={dialogState.pageData}
                 />
             )} 
+<<<<<<< HEAD
+            {/* {dialogState.isSectionOpen && (
+                <EditPageSection
+                    dialogController={[dialogState.isSectionOpen, (isSectionOpen) => setDialogState({ open:false, pageData: undefined,isSectionOpen:isSectionOpen })]}
+                    editAblePage={dialogState.pageData}
+                />
+            )}  */}
+=======
             {dialogState.isSectionOpen && (
                 <EditPageSectionDialog
                     dialogController={[dialogState.isSectionOpen, (isSectionOpen) => setDialogState({ open:false, pageData: undefined,isSectionOpen:isSectionOpen })]}
                     editAblePage={dialogState.pageData}
                 />
             )} 
+>>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
              {deleteTarget && (
                 <ConfirmDeleteDialog
                     open={!!deleteTarget}

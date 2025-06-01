@@ -1,5 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
+<<<<<<< HEAD
+import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings,ShieldCheck,Grip } from "lucide-react";
+=======
 import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings } from "lucide-react";
+>>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
 
 import {
   Sidebar,
@@ -25,6 +29,8 @@ export function MainSidebar() {
   const { logout, isLoading } = useAuth()
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
+  console.log("isMobileOpen", isMobileOpen);
+  
 
   const isActive = (path: string) => location.pathname.startsWith(path);
 
@@ -36,7 +42,10 @@ export function MainSidebar() {
         </Button>
       </div>
 
-      <Sidebar className={`fixed inset-y-0 left-0 z-40 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <Sidebar 
+        className="w-full h-svh relative" 
+        collapsible="none"
+      >
         <SidebarHeader className="flex items-center justify-between p-4">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
@@ -216,6 +225,29 @@ export function MainSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>                    
               </SidebarMenu>
+<<<<<<< HEAD
+              <SidebarMenu className="">
+                <SidebarMenuItem>
+                  <SidebarMenuButton >
+                <Link to="testimonials" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("testimonials") ? "bg-gray-100 " : ""} `}>
+                    <ShieldCheck size={16}/> 
+                    Testimonials
+                  </Link>                        
+                  </SidebarMenuButton>
+                </SidebarMenuItem>                    
+              </SidebarMenu>
+               <SidebarMenu className="">
+                <SidebarMenuItem>
+                  <SidebarMenuButton >
+                <Link to="our-teams" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("our-teams") ? "bg-gray-100 " : ""} `}>
+                    <Grip size={16} />  
+                    Our Teams
+                  </Link>                        
+                  </SidebarMenuButton>
+                </SidebarMenuItem>                    
+              </SidebarMenu>
+=======
+>>>>>>> 8a3fd8b7b18b81dc57cd0b6b6d0cd47bc0580d98
               <Collapsible className="px-4" defaultOpen>
                 <CollapsibleTrigger asChild>
                   <Button variant={"ghost"} className="flex items-center justify-between w-full text-sm font-medium text-left py-2">
