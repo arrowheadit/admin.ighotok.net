@@ -23,3 +23,4 @@ export * from "./Settings/page";
 export * from "./Membership/Memberships";
 export * from "./Membership/CreateMembership";
 export * from "./Membership/EditMembership";
+export * from "./contact/ContactList";

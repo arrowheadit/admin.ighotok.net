@@ -16,3 +16,4 @@ export * from './testimonials';
 export * from './ourTeamsQuery';
 export * from './Settings/pages';
 export * from './memberships';
+export * from './contact/contacts';

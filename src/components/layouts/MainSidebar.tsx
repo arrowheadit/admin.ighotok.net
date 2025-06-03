@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings,ShieldCheck,Grip,Grid2x2Plus} from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings,ShieldCheck,Grip,Grid2x2Plus,PhoneCall} from "lucide-react";
 
 import {
   Sidebar,
@@ -217,6 +217,17 @@ export function MainSidebar() {
                 <Link to="profession" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("profession") ? "bg-gray-100 " : ""} `}>
                     <BriefcaseBusiness size={16}  />
                     Profession
+                  </Link>                        
+                  </SidebarMenuButton>
+                </SidebarMenuItem>                    
+              </SidebarMenu>
+              <SidebarMenu className="">
+                <SidebarMenuItem>
+                  <SidebarMenuButton >
+                <Link to="contacts" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("contacts") ? "bg-gray-100 " : ""} `}>                      
+                      <PhoneCall size={16} />
+                      
+                    Contacts
                   </Link>                        
                   </SidebarMenuButton>
                 </SidebarMenuItem>                    
