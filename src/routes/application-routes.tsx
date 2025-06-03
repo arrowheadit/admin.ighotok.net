@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthenticatedOnly, GuestsOnly } from "./middleware";
 import { DashboardLayout } from "@/components/layouts/dashboard-layout";
-import { Categories, CreatePost, Home, Login, Post, Tags, Religions,Castes,Educations,EducationSubjects,Profession,Faqs,Area, Upazila, District,Division,Page,EditPageSection, Testimonials, OurTeams } from "@/pages";
+import { Categories, CreatePost, Home, Login, Post, Tags, Religions,Castes,Educations,EducationSubjects,Profession,Faqs,Area, Upazila, District,Division,Page,EditPageSection, Testimonials, OurTeams,Memberships,CreateMembership,EditMembership } from "@/pages";
 import { useAuth } from "@/context/hooks";
 import { useEffect, useState } from "react";
 
@@ -57,6 +57,14 @@ export default function ApplicationRoutes() {
                             </Route>
                             <Route path="profession" element={<Profession />} /> 
                             <Route path="faqs" element={<Faqs />} />
+                            {/* Membership Routes Group */}
+                            <Route path="/membership">
+                                <Route path="memberships" element={<Memberships />} />
+                                <Route path="create" element={<CreateMembership />} />
+                                <Route path="edit/:slug" element={<EditMembership/>} />
+                            </Route>
+                            
+
                             <Route path="testimonials" element={<Testimonials />} />
                             <Route path="our-teams" element={<OurTeams />} />
                             {/* Geo Locations Routes Group */}

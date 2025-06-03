@@ -11,7 +11,7 @@ import { toast } from "sonner";
 
 export function EditPageSection() {
   const location = useLocation();
-  const pageData = location.state;
+  const pageData = location.state; 
   const { mutateAsync: updatePageContent } = useUpdatePageContentMutation();
 
   const [formContent, setFormContent] = useState<Record<string, unknown> | null>(null);

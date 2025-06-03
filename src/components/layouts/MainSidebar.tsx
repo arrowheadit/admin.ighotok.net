@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings,ShieldCheck,Grip } from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings,ShieldCheck,Grip,Grid2x2Plus} from "lucide-react";
 
 import {
   Sidebar,
@@ -58,6 +58,16 @@ export function MainSidebar() {
           <SidebarGroup>
             <SidebarGroupLabel className="px-4 pt-2 text-sm font-semibold text-gray-600">Management</SidebarGroupLabel>
             <SidebarGroupContent>
+              <SidebarMenu className="">
+                <SidebarMenuItem>
+                  <SidebarMenuButton >
+                    <Link to="membership/memberships" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("membership/memberships") ? "bg-gray-100 " : ""} `}>
+                      <Grid2x2Plus size={16}/>
+                    Memberships
+                  </Link>                        
+                  </SidebarMenuButton>
+                </SidebarMenuItem>                    
+              </SidebarMenu>
               <Collapsible className="px-4" defaultOpen>
                 <CollapsibleTrigger asChild>
                   <Button variant={"ghost"} className="flex items-center justify-between w-full text-sm font-medium text-left py-2">
