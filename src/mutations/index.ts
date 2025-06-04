@@ -16,4 +16,5 @@ export * from "./testimonials"
 export * from "./ourTeams"
 export * from "./memberships"
 export * from "./contacts"
+export * from "./lifeStory"
 

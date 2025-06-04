@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings,ShieldCheck,Grip,Grid2x2Plus,PhoneCall} from "lucide-react";
+import { LayoutDashboard, LogOut, Menu, X, ChevronDown, Bookmark, Loader2, BookOpenText,BriefcaseBusiness,MapPinned,ShieldQuestion,GraduationCap,Settings,ShieldCheck,Grip,Grid2x2Plus,PhoneCall,Flower2} from "lucide-react";
 
 import {
   Sidebar,
@@ -226,7 +226,6 @@ export function MainSidebar() {
                   <SidebarMenuButton >
                 <Link to="contacts" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("contacts") ? "bg-gray-100 " : ""} `}>                      
                       <PhoneCall size={16} />
-                      
                     Contacts
                   </Link>                        
                   </SidebarMenuButton>
@@ -238,6 +237,16 @@ export function MainSidebar() {
                 <Link to="faqs" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("faqs") ? "bg-gray-100 " : ""} `}>
                     <ShieldQuestion size={16} />
                     Faqs
+                  </Link>                        
+                  </SidebarMenuButton>
+                </SidebarMenuItem>                    
+              </SidebarMenu>
+              <SidebarMenu className="">
+                <SidebarMenuItem>
+                  <SidebarMenuButton >
+                <Link to="life-stories" className={`flex items-center justify-start gap-2 w-full text-sm font-medium text-left  px-4 hover:bg-gray-100 ${isActive("life-stories") ? "bg-gray-100 " : ""} `}>
+                      <Flower2 size={16}/>
+                    Life Story
                   </Link>                        
                   </SidebarMenuButton>
                 </SidebarMenuItem>                    
