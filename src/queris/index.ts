@@ -18,4 +18,5 @@ export * from './Settings/pages';
 export * from './memberships';
 export * from './contact/contacts';
 export * from './lifeStories';
+export * from './Settings/paymentMethods'
 

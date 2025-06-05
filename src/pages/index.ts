@@ -25,3 +25,6 @@ export * from "./Membership/CreateMembership";
 export * from "./Membership/EditMembership";
 export * from "./contact/ContactList";
 export * from "./LifeStory";
+export * from "./PaymentMethod/PaymentMethods";
+export * from "./PaymentMethod/CreatePaymentMethod";
+export * from "./PaymentMethod/EditPaymentMethod";

@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthenticatedOnly, GuestsOnly } from "./middleware";
 import { DashboardLayout } from "@/components/layouts/dashboard-layout";
-import { Categories, CreatePost, Home, Login, Post, Tags, Religions,Castes,Educations,EducationSubjects,Profession,Faqs,Area, Upazila, District,Division,Page,EditPageSection, Testimonials, OurTeams,Memberships,CreateMembership,EditMembership,ContactList, LifeStory } from "@/pages";
+import { Categories, CreatePost, Home, Login, Post, Tags, Religions,Castes,Educations,EducationSubjects,Profession,Faqs,Area, Upazila, District,Division,Page,EditPageSection, Testimonials, OurTeams,Memberships,CreateMembership,EditMembership,ContactList, LifeStory, PaymentMethods,CreatePaymentMethod,EditPaymentMethod } from "@/pages";
 import { useAuth } from "@/context/hooks";
 import { useEffect, useState } from "react";
+
 
 export default function ApplicationRoutes() {
     const { isAuthenticated } = useAuth();
@@ -70,8 +71,16 @@ export default function ApplicationRoutes() {
                             <Route path="our-teams" element={<OurTeams />} />
                             {/* Geo Locations Routes Group */}
                             <Route path="/settings">
+                                <Route path="payment-methods" element={<PaymentMethods />} />
+                                <Route path="create" element={<CreateMembership />} />
+                                <Route path="payment-methods" element={<PaymentMethods />} />
                                 <Route path="pages" element={<Page />} /> 
                                 <Route path="pages/edit-page-section/:slug" element={<EditPageSection />} />
+                            </Route>
+                            <Route path="/payment-methods">
+                                <Route path="payment-method-list" element={<PaymentMethods />} />
+                                <Route path="create" element={<CreatePaymentMethod />} />
+                                 <Route path="edit/:slug" element={<EditPaymentMethod />} />
                             </Route>
                         </Route>
                     </Route>

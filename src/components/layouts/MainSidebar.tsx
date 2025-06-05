@@ -285,6 +285,17 @@ export function MainSidebar() {
                   <SidebarMenu className="ml-6 space-y-1">
                     <SidebarMenuItem>
                       <SidebarMenuButton asChild>
+                        <Link to="payment-methods/payment-method-list" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("payment-methods/payment-method-list") ? "bg-gray-100 " : ""} !w-[85%]`}>
+                          Payment Methods
+                        </Link>                        
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>                    
+                  </SidebarMenu>
+                </CollapsibleContent>
+                <CollapsibleContent>
+                  <SidebarMenu className="ml-6 space-y-1">
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
                         <Link to="settings/pages" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("settings/Pages") ? "bg-gray-100 " : ""} !w-[85%]`}>
                           Pages
                         </Link>                        
