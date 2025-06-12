@@ -30,6 +30,9 @@ export default function PageTable() {
     const handleEditPageSection = (page: PageItem) => {
         navigate(`edit-page-section/${page.slug}`, { state:  page });
     };
+    const handleSeoSetup = (page: PageItem) => {
+        navigate(`seo-setup/${page.slug}`, { state:  page });
+    };
     
     const { data: pages,isPending } = usePageQuery({ page, page_size, sort_by, sort_type ,search});
     console.log('Pages..', pages);
@@ -175,6 +178,25 @@ export default function PageTable() {
                                                         </TooltipTrigger>
                                                         <TooltipContent>
                                                             Edit Section
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
+                                                
+                                            </Button>
+                                            <Button
+                                            className="ml-2 bg-[#0abde3]"    
+                                               variant="default"
+                                                size="sm" 
+                                               onClick={() => handleSeoSetup(page)}
+                                            >
+                                               
+                                                <TooltipProvider>
+                                                    <Tooltip>
+                                                        <TooltipTrigger>
+                                                            <Component fill="#0abde3" color="#FFF" />
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            Setup SEO
                                                         </TooltipContent>
                                                     </Tooltip>
                                                 </TooltipProvider>

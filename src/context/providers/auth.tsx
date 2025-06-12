@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }: Readonly<{
 
     const login = (value: LoginFormValues) => {
         setIsLoading(true);
+        console.log("Login values:", value);
         guestAxios.post('/auth/sign-in', { 
             credential: value.credential,
             password: value.password
@@ -36,8 +37,8 @@ export const AuthProvider = ({ children }: Readonly<{
         }).then((response) => {
             if (response?.data.data) {
                 const { token, user } = response.data.data;
-                console.log("token", token);
-                console.log("user", user);
+                console.log("Login token", token);
+                console.log("Login user", user);
                 
                 Cookies.set('auth', JSON.stringify({
                     token: response.data.data.token,

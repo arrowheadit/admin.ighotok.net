@@ -17,6 +17,7 @@ export * from "./GeoLocations/district";
 export * from "./GeoLocations/division";
 export * from "./Settings/page";
 export * from "./Settings/EditPageSection";
+export * from "./Settings/SeoSetup";
 export * from "./Testimonials";
 export * from "./OurTeams";
 export * from "./Settings/page";
