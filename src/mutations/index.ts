@@ -19,4 +19,5 @@ export * from "./contacts"
 export * from "./lifeStory"
 export * from "./Settings/paymentMethod"
 export * from "./Settings/seoSetup";
+export * from "./Settings/notification";
 

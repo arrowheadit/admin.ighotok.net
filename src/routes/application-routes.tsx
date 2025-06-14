@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthenticatedOnly, GuestsOnly } from "./middleware";
 import { DashboardLayout } from "@/components/layouts/dashboard-layout";
-import { Categories, CreatePost, Home, Login, Post, Tags, Religions,Castes,Educations,EducationSubjects,Profession,Faqs,Area, Upazila, District,Division,Page,EditPageSection,SeoSetup, Testimonials, OurTeams,Memberships,CreateMembership,EditMembership,ContactList, LifeStory, PaymentMethods,CreatePaymentMethod,EditPaymentMethod } from "@/pages";
+import { Categories, CreatePost, Home, Login, Post, Tags, Religions,Castes,Educations,EducationSubjects,Profession,Faqs,Area, Upazila, District,Division,Page,EditPageSection,SeoSetup, Testimonials, OurTeams,Memberships,CreateMembership,EditMembership,ContactList, LifeStory, PaymentMethods,CreatePaymentMethod,EditPaymentMethod,Notification } from "@/pages";
 import { useAuth } from "@/context/hooks";
 import { useEffect, useState } from "react";
 
@@ -77,6 +77,7 @@ export default function ApplicationRoutes() {
                                 <Route path="pages" element={<Page />} /> 
                                 <Route path="pages/edit-page-section/:slug" element={<EditPageSection />} />
                                 <Route path="pages/seo-setup/:slug" element={<SeoSetup />} />
+                                <Route path="notifications" element={<Notification />} />
                             </Route>
                             <Route path="/payment-methods">
                                 <Route path="payment-method-list" element={<PaymentMethods />} />

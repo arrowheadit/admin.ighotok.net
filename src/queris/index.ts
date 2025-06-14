@@ -15,6 +15,7 @@ export * from './Settings/pages';
 export * from './testimonials';
 export * from './ourTeamsQuery';
 export * from './Settings/pages';
+export * from './Settings/notifications';
 export * from './memberships';
 export * from './contact/contacts';
 export * from './lifeStories';

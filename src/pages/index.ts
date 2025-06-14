@@ -21,6 +21,7 @@ export * from "./Settings/SeoSetup";
 export * from "./Testimonials";
 export * from "./OurTeams";
 export * from "./Settings/page";
+export * from "./Settings/notification";
 export * from "./Membership/Memberships";
 export * from "./Membership/CreateMembership";
 export * from "./Membership/EditMembership";

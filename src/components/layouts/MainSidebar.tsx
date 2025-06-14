@@ -303,6 +303,17 @@ export function MainSidebar() {
                     </SidebarMenuItem>                    
                   </SidebarMenu>
                 </CollapsibleContent>
+                <CollapsibleContent>
+                  <SidebarMenu className="ml-6 space-y-1">
+                    <SidebarMenuItem>
+                      <SidebarMenuButton asChild>
+                        <Link to="settings/notifications" className={`flex items-center gap-3 px-4 py-2 hover:bg-gray-100 ${isActive("settings/notifications") ? "bg-gray-100 " : ""} !w-[85%]`}>
+                          Notification Template
+                        </Link>                        
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>                    
+                  </SidebarMenu>
+                </CollapsibleContent>
               </Collapsible> 
             </SidebarGroupContent>
           </SidebarGroup>
