@@ -21,7 +21,7 @@ export default function AddPageDialog({
     id: Number(editAblePage?.id) || 0,
     title: editAblePage?.title || "",
     slug: editAblePage?.slug || "",
-    content: editAblePage?.content || "",
+    content: editAblePage?.content? JSON.stringify(editAblePage?.content) : "",
     status:editAblePage?.status || "active",
   });
    // Handle input changes
@@ -116,36 +116,6 @@ const [errors, setErrors] = useState<Partial<Record<keyof CreatePageItem, string
               className="w-full"
               required
               value={formState.title}
-              onChange={handleInputChange}
-            />
-          </div>
-          {/* <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="name" className="block mb-2 font-medium">Slug</Label>              
-            </div>
-            <Input
-              disabled={isCreating || isUpdating}
-              id="slug"
-              name="slug"
-              type="text"
-              className="w-full"
-              required
-              value={formState.slug}
-              onChange={(e) => setFormState({ ...formState, slug: e.target.value })}
-            />
-          </div> */}
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <Label htmlFor="name" className="block mb-2 font-medium">Content</Label>              
-            </div>
-            <Input
-              disabled={isCreating || isUpdating}
-              id="url"
-              name="url"
-              type="text"
-              className="w-full"
-              required
-              value={formState.content}
               onChange={handleInputChange}
             />
           </div>

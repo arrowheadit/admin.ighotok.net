@@ -27,7 +27,7 @@ export const useUpdatePageMutation = () => {
             return await authAxios.put(`/settings/pages/${page.slug}`, {
                 id:page.id,
                 title: page.title,
-                content: Object.entries(page.content),
+                content: page.content,
                 status: page.status,
             })
         },
