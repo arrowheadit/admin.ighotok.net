@@ -10,6 +10,7 @@ import { toast } from "sonner";
 type Props = {
   selectedPaymentMethod?: updatePaymentMethod;
 }
+ import { snackCaseToUpperCase } from "@/utils/index";
 export function AddEditPaymentMethodForm({ selectedPaymentMethod }:Props) { 
   const isEditMode = !!selectedPaymentMethod;  
   const [formData, setFormData] = useState<createPaymentMethod>({
@@ -27,7 +28,8 @@ export function AddEditPaymentMethodForm({ selectedPaymentMethod }:Props) {
   class_name: "",
 });
   useEffect(() => {
-    if (isEditMode) {     
+    if (isEditMode) { 
+      console.log("selectedPaymentMethod", selectedPaymentMethod);
       setFormData(
       {
         name: selectedPaymentMethod?.name ?? "",
@@ -66,7 +68,17 @@ const { mutateAsync: updatePaymentMethod } = useUpdatePaymentMethodMutation()
       });
     }
   };
-  // Handle switch changes
+  const handleInputMetaChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      meta: {
+        ...prev.meta,
+        [name]: value,
+      },
+    }));
+  };
   const handleSwitchChange = (name: keyof createPaymentMethod, checked: string) => {
     setFormData({
       ...formData,
@@ -282,17 +294,54 @@ const { mutateAsync: updatePaymentMethod } = useUpdatePaymentMethodMutation()
               />        
               {errors.percent_charge && <p className="text-sm text-red-500">{errors.percent_charge}</p>}
             </div>
-           
-           
-                      
+            
 
-            {/* Submit Button */}
-            <Button type="submit" className="w-full">
-              {isEditMode ? (<span>Update Payment Method</span>):(<span>Create Payment Method</span>)}
-            </Button>
           </div>
+          {formData?.meta && (
+              <div className="col-span-12 sm:col-span-12 border p-2">
+                <h5>Meta Information</h5>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  {formData?.meta && typeof formData?.meta === "object" && (Object.entries(formData.meta).map((meta,index) => (
+                    meta[0] === "is_sandbox" ?
+                      <div className="flex flex-col items-center" key={index}>
+                        <Label htmlFor="name" className="block mb-2 font-medium">{snackCaseToUpperCase(meta[0])}</Label>
+                        <Switch
+                          className="cursor-pointer"
+                          checked={meta[1] === true}
+                          onCheckedChange={(checked) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              meta: {
+                                ...prev.meta,
+                                is_sandbox: checked,
+                              },
+                            }))
+                          }
+                        />
+                      </div> 
+                    :
+                    <div key={index} className="flex flex-col items-center">
+                      <Label htmlFor={meta[0]} className="text-sm mb-2">{snackCaseToUpperCase(meta[0])}</Label>
+                      <Input
+                        id={meta[0]}
+                        className="w-full"
+                        type="text"
+                        name={meta[0]}
+                        placeholder={`Enter ${meta[0]} Information`}
+                        value={String(meta[1])}
+                        onChange={handleInputMetaChange}
+                      />
+                    </div>
+                  )))}
+              </div>
+            </div>
+          )} 
         </div>
-      </form>
-    </Card>
-  );
+        {/* Submit Button */}
+        <Button type="submit" className="w-full">
+          {isEditMode ? (<span>Update Payment Method</span>):(<span>Create Payment Method</span>)}
+        </Button>
+    </form>
+  </Card>
+);
 }

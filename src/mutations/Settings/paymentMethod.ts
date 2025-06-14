@@ -78,13 +78,13 @@ export const useUpdatePaymentMethodMutation = () => {
           formData.append("fixed_charge", String(paymentMethod.fixed_charge));
         }
 
-        //  if (paymentMethod.meta != null) {
-        //    formData.append("meta", String(paymentMethod.meta));
-        //  }
+         if (paymentMethod.meta != null) {
+           formData.append("meta", JSON.stringify(paymentMethod.meta));
+         }
         if (paymentMethod.status != null) {
           formData.append("status", String(paymentMethod.status));
         }
-
+console.log("Payment Method Data in useUpdatePaymentMethodMutation", formData);
         return await authAxios.post(
           `/settings/payment-methods/${paymentMethod.id}`,
           formData,

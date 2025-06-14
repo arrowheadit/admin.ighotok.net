@@ -29,7 +29,8 @@ export const convertToSlug = (text: string): string => {
 };
 
 export const snackCaseToUpperCase = (str: string): string  => {
-    return str.split("_").join(" ").toUpperCase();
+    //return str.split("_").join(" ").toUpperCase();
+    return str.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 };
 export const JsonParse = (str: string): unknown[] | Record<string, unknown> => {
     try {
